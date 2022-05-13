@@ -11,7 +11,8 @@ It currently supports:
 - ❗ Nets must be used for classification tasks in discrete domains
 
 Planned features include:
-- 📝 model building -- build a net from _any_ knowledge base!
+- 📝 model building
+- 📝 counter-model building
 - 📝 Proper sigmoid activation functions
 - 📝 Learning via backpropagation (!)
 - 📝 Plug-and-play with your existing Tensorflow model
