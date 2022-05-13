@@ -30,8 +30,8 @@ For more details on what makes this neuro-symbolic interface work, see our [pape
 
 What drives our program is the idea that neural networks can be used as formal semantics of knowledge bases.  If you're interested in learning more, I highly recommend reading:
 
-- Leitgeb, Hannes. **Neural network models of conditionals: An introduction**. [pdf](https://www.academia.edu/download/32793110/LeitgebSanSebastianFINAL.pdf)
+- Leitgeb, Hannes. **Neural network models of conditionals: An introduction**. [[pdf]](https://www.academia.edu/download/32793110/LeitgebSanSebastianFINAL.pdf)
 - A.S. d’Avila Garcez,  K. Broda, D.M. Gabbay.  **Symbolic knowledge extraction from trained neural
-networks: A sound approach**.  [pdf](https://www.sciencedirect.com/science/article/pii/S0004370200000771/pdf?md5=f782984da6f1244a563048b352a31ce5&pid=1-s2.0-S0004370200000771-main.pdf)
+networks: A sound approach**.  [[pdf]](https://www.sciencedirect.com/science/article/pii/S0004370200000771/pdf?md5=f782984da6f1244a563048b352a31ce5&pid=1-s2.0-S0004370200000771-main.pdf)
 - Laura Giordano, Valentina Gliozzi, and Daniele Theseider Dupré.  **A conditional, a fuzzy and a probabilistic interpretation
-of self-organising maps**. [pdf](https://arxiv.org/pdf/2103.06854.pdf)
+of self-organising maps**. [[pdf]](https://arxiv.org/pdf/2103.06854.pdf)
