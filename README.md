@@ -29,7 +29,7 @@ Planned features include:
 # 🔗 Links and Resources
 For more details on what makes this neuro-symbolic interface work, see our [paper](https://journals.flvc.org/FLAIRS/article/download/130735/133901).
 
-What drives our program is the idea that neural networks can be used as formal semantics of knowledge bases.  If you're interested in learning more, I highly recommend reading:
+What drives our program is the idea that neural networks can be used as formal semantics of knowledge bases.  If you're interested in learning more, I highly recommend starting with:
 
 - Leitgeb, Hannes. **Neural network models of conditionals: An introduction**. [[pdf]](https://www.academia.edu/download/32793110/LeitgebSanSebastianFINAL.pdf)
 - A.S. d’Avila Garcez,  K. Broda, D.M. Gabbay.  **Symbolic knowledge extraction from trained neural
