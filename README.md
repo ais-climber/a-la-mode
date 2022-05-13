@@ -1,5 +1,5 @@
 # Neural Semantics
-A neuro-symbolic interface, intended for both **model extraction** (extracting knowledge from a net) as well as **model building** (building a net from a knowledge base).  The Neural Semantics is a budding alternative approach to 
+A neuro-symbolic interface, intended for both **model extraction** (extracting knowledge from a net) as well as **model building** (building a net from a knowledge base).
 
 It currently supports:
 - :heavy_check_mark: model extraction
