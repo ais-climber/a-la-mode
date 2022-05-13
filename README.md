@@ -17,7 +17,7 @@ Planned features include:
 - 📝 Plug-and-play with your existing Tensorflow model
 - 📝 Tasks beyond classification
 
-# :symbols:/:brain: The Translation
+# :brain: The Translation
 
 
 # 💻 How to Install and Use
