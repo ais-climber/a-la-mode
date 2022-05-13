@@ -1,7 +1,7 @@
 # Neural Semantics
-A neuro-symbolic interface, intended for both **model extraction** (extracting knowledge from a net) as well as **model building** (building a net from a knowledge base).
+A neuro-symbolic interface, intended for both **model extraction** (extracting knowledge from a net) as well as **model building** (building a net from a knowledge base).  The core idea is that neural networks can be used as formal semantics of knowledge bases so sentences in a knowledge base correspond to the dynamics of the net.
 
-It currently supports:
+Our system currently supports:
 - :heavy_check_mark: model extraction
 - :heavy_check_mark: countermodel generation (via a random search, no construction yet)
 - :heavy_check_mark: Hebbian learning -- with syntax for inferring _what a net learns_.
