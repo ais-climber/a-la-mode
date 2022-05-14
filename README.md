@@ -1,22 +1,26 @@
 # Neural Semantics
 A neuro-symbolic interface, intended for both **model extraction** (extracting knowledge from a net) as well as **model building** (building a net from a knowledge base).  The name comes from the core idea -- that the internal dynamics of neural networks can be used as formal semantics of knowledge bases.
 
-Our system currently supports:
-- :heavy_check_mark: model extraction
-- :heavy_check_mark: countermodel generation (via a random search, no construction yet)
-- :heavy_check_mark: Hebbian learning -- with syntax for inferring _what a net learns_.
-- ❗ feedforward neural networks with binary step activation functions
-- ❗ knowledge bases with a certain restricted modal logic syntax (see below)
-- ❗ Nets currently must be hand-crafted
-- ❗ Nets must be used for classification tasks in discrete domains
+## :heavy_check_mark: Supported Features:
+- Model extraction
+- Countermodel generation (via a random search, no construction yet)
+- Inferring what the net has learned before and after learning
 
-Planned features include:
-- 📝 model building
-- 📝 counter-model building
-- 📝 Proper sigmoid activation functions
-- 📝 Learning via backpropagation (!)
-- 📝 Plug-and-play with your existing Tensorflow model
-- 📝 Tasks beyond classification
+## ❗ Current Limitations:
+- Nets must be feed-forward, with a binary step activation function
+- Nets currently must be hand-crafted
+- Nets must be used for classification tasks in discrete domains
+- Nets learn via (unsupervised) Hebbian learning
+- Knowledge bases are expressed in a certain restricted modal syntax (see below)
+
+## 📝 Planned Features
+- Model building
+- Counter-model building
+- Proper sigmoid activation functions
+- Plug-and-play with your existing Tensorflow model
+- Tasks beyond classification
+- Learning via backpropagation (!)
+- Predicate/quantifier reasoning
 
 # :brain: The Translation
 ( so sentences in a knowledge base correspond to the dynamics of the net)
