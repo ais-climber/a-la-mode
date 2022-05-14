@@ -55,10 +55,10 @@ net = BFNN(nodes, layers, weights, threshold, rate)
 model = Model(net, prop_map)
 
 print("> penguin → bird \n    ", model.is_model("penguin → bird"), "\n")
-print("> bird ⇒ flies \n    ", model.is_model("bird ⇒ flies"), "\n")
-print("> penguin ⇒ flies \n    ", model.is_model("penguin ⇒ flies"), "\n")
-print("> orca+ zebra+ panda+\n>  (bird ⇒ flies) \n    ", model.is_model("orca+ (zebra+ (panda+ (bird ⇒ flies)))"), "\n")
-print("> orca+ zebra+ panda+\n>  (penguin ⇒ flies) \n    ", model.is_model("orca+ (zebra+ (panda+ (penguin ⇒ flies)))"))
+print("> bird ⇒ flies \n    ", model.is_model("(T bird) → flies"), "\n")
+print("> penguin ⇒ flies \n    ", model.is_model("(T penguin) → flies"), "\n")
+print("> orca+ zebra+ panda+\n>  (bird ⇒ flies) \n    ", model.is_model("orca+ (zebra+ (panda+ ((T bird) → flies)))"), "\n")
+print("> orca+ zebra+ panda+\n>  (penguin ⇒ flies) \n    ", model.is_model("orca+ (zebra+ (panda+ ((T penguin) → flies)))"))
 ```
 
 The functions `model.is_model(expr)` and `model.interpret(expr)` accept the following syntax:
@@ -73,7 +73,7 @@ The functions `model.is_model(expr)` and `model.interpret(expr)` accept the foll
 | `typ P`        | `T P`     |
 |  `P up Q`      | `P+ Q`    |
 
-`P` and `Q` can be replaced by almost any string of alphas, with one major exception:  Avoid using capital `T` and capital `K`.  The convention I recommend is to use `A`, `B`, `C`, ... for variables, and `lowercase`, `strings` when you want to use actual strings.
+`P` and `Q` can be replaced by almost any string of alphas, with one major exception:  Avoid using capital `T` and capital `K`.  The convention I recommend is to use `A`, `B`, `C`, ... for variables, and `lowercase`, `strings` when you want to use actual strings.  Also, parsing is somewhat experimental, so be generous with parentheses.
 
 For logicians/knowledge engineers: `K` acts like an S4 modality (think "knows P"), `T` acts like a non-normal ENT4 modality (turns out to be "typically P" or "the typical P".  We can also express nonmonotonic (defeasible) conditionals in this language -- `Typ P implies Q` is a loop-cumulative conditional.
 
@@ -90,8 +90,13 @@ For more details on what makes this neuro-symbolic interface work, see our [pape
 
 What drives our program is the idea that neural networks can be used as formal semantics of knowledge bases.  If you're interested in learning more, I highly recommend starting with:
 
-- Leitgeb, Hannes. **Neural network models of conditionals: An introduction**. [[pdf]](https://www.academia.edu/download/32793110/LeitgebSanSebastianFINAL.pdf)
+- Leitgeb, Hannes. **Neural network models of conditionals: An introduction**. [[link to pdf]](https://scholar.google.com/scholar?cluster=2702081425114400974&hl=en&as_sdt=0,15)
 - A.S. d’Avila Garcez,  K. Broda, D.M. Gabbay.  **Symbolic knowledge extraction from trained neural
 networks: A sound approach**.  [[pdf]](https://www.sciencedirect.com/science/article/pii/S0004370200000771/pdf?md5=f782984da6f1244a563048b352a31ce5&pid=1-s2.0-S0004370200000771-main.pdf)
 - Laura Giordano, Valentina Gliozzi, and Daniele Theseider Dupré.  **A conditional, a fuzzy and a probabilistic interpretation
 of self-organising maps**. [[pdf]](https://arxiv.org/pdf/2103.06854.pdf)
+
+# :incoming_envelope: Contact
+If something is broken, you can't run the program, or you have any suggestions for features, feel free to file an issue.  If you are interested in contributing to smaller TODOs (bug fixes, quality of life), just make the change and submit a pull request. (I'd be surprised and flattered!)
+
+Most of the bigger TODOs depend on more theoretical work in neuro-symbolic AI (i.e. proving theorems about Neural Semantics).  If you're interested in collaborating, see my [contact](https://ais-climber.github.io/contact/) page.
