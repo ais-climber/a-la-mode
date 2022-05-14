@@ -62,7 +62,6 @@ print("> orca+ zebra+ panda+\n>  (penguin ⇒ flies) \n    ", model.is_model("or
 ```
 
 The functions `model.is_model(expr)` and `model.interpret(expr)` accept the following syntax:
-|        Syntax                |
 | Easy to Write | Easy to Read |
 | -------------- | --------- |
 | `not P`        | `¬ P`     |
