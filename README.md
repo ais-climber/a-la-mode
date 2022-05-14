@@ -43,7 +43,7 @@ This program is currently in development, and many of the planned features invol
 
 To get you started, copy the following into a file within your `neural-semantics/` directory -- say `neural-semantics/penguin.py`.  Now navigate to this directory in your terminal and run `python3 penguin.py` (or `py penguin.py` for Windows).
 
-```
+```python
 from BFNN import *
 from Model import *
 
