@@ -21,9 +21,9 @@ A neuro-symbolic interface, intended for both **model extraction** (extracting k
 - Counter-model building
 - Proper sigmoid activation functions
 - Plug-and-play with your existing Tensorflow model
-- Tasks beyond classification
 - Learning via backpropagation (!)
-- Predicate/quantifier reasoning
+- (stretch goal) Tasks beyond classification
+- (extreme stretch goal) Predicate/quantifier reasoning
 
 # 💻 Installation
 
