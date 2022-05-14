@@ -23,18 +23,6 @@ A neuro-symbolic interface, intended for both **model extraction** (extracting k
 - Learning via backpropagation (!)
 - Predicate/quantifier reasoning
 
-# :brain: The Translation
-
-| Syntax      | Neural Network  |
-| ----------- | ------------------------------------------- |
-| `K P`       | The neurons **reachable** from the set `P`  |
-| `T P`       | **Forward-Propagation** of `P`              |
-|  `P+ Q`     | Do **Hebbian Update** on `P`, then eval `Q` |
-
-Conditionals are expressible in this language:  P ⇒ Q can be expressed as `TP 🠒 Q`.
-
-( so sentences in a knowledge base correspond to the dynamics of the net)
-
 # 💻 Running the Program
 
 
@@ -70,6 +58,29 @@ print("> penguin ⇒ flies \n    ", model.is_model("penguin ⇒ flies"), "\n")
 print("> orca+ zebra+ panda+\n>  (bird ⇒ flies) \n    ", model.is_model("orca+ (zebra+ (panda+ (bird ⇒ flies)))"), "\n")
 print("> orca+ zebra+ panda+\n>  (penguin ⇒ flies) \n    ", model.is_model("orca+ (zebra+ (panda+ (penguin ⇒ flies)))"))
 ```
+
+The functions `model.is_model(expr)` and `model.interpret(expr)` accept the following syntax:
+| Easy to Write | Easy to Read |
+| -------------- | --------- |
+| `not P`        | `¬ P`     |
+| `P and Q`      | `P ∧ Q`   |
+| `P or Q`       | `P ∨ Q`   |
+| `P implies Q`  | `P → Q`   |
+| `P iff q`      | `P ↔ Q`   |
+| `knows P`      | `K P`     |
+| `typ P`        | `T P`     |
+|  `P up Q`      | `P+ Q`    |
+
+`P` and `Q` can be replaced by almost any string of alphas, with one major exception:  Avoid using capital `T` and capital `K`.  The convention I recommend is to use `A`, `B`, `C`, ... for variables, and `lowercase`, `strings` when you want to use actual strings.
+
+For logicians/knowledge engineers: `K` acts like an S4 modality (think "knows P"), `T` acts like a non-normal ENT4 modality (turns out to be "typically P" or "the typical P".  We can also express nonmonotonic (defeasible) conditionals in this language -- `Typ P implies Q` is a loop-cumulative conditional.
+
+If you want insight into _why_ these specific modal operators, note that each modal operator corresponds directly to some internal behavior of the neural network.  The mapping is:
+| Syntax      | Neural Network  |
+| ----------- | ------------------------------------------- |
+| `K P`       | The neurons **reachable** from the set `P`  |
+| `T P`       | **Forward-Propagation** of `P`              |
+|  `P+ Q`     | Do **Hebbian Update** on `P`, then eval `Q` |
 
 
 # 🔗 Links and Resources
