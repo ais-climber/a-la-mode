@@ -29,7 +29,9 @@ A neuro-symbolic interface, intended for both **model extraction** (extracting k
 
 
 # :brain: Trying It Out
-This program is currently in development, and many of the planned features involve significant research efforts.  So what the program can do right now is somewhat limited.  What you _can_ do with it is hand-craft a neural network and infer some things about what the net knows, expects, and learns.  (There is planned support for being able to plug-and-play with your own Tensorflow model.) 
+This program is currently in development, and many of the planned features involve significant research efforts (this is my PhD).  So what the program can do right now is somewhat limited.  
+
+What you _can_ do with it is hand-craft a neural network and infer some things about what the net knows, expects, and learns.  (There is planned support for being able to plug-and-play with your own Tensorflow model.) 
 
 To get you started, copy the following into a file within your `neural-semantics/` directory -- say `neural-semantics/penguin.py`.  Now navigate to this directory in your terminal and run `python3 penguin.py` (or `py penguin.py` for Windows).
 
