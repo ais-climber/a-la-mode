@@ -4,6 +4,7 @@ A neuro-symbolic interface, intended for both **model extraction** (extracting k
 ## :heavy_check_mark: Supported Features:
 - Model extraction
 - Countermodel generation (via a random search, no construction yet)
+- Modal and conditional reasoning
 - Inferring what the net has learned before and after learning
 
 ## ❗ Current Limitations:
