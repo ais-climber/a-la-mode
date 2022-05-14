@@ -26,28 +26,27 @@ A neuro-symbolic interface, intended for both **model extraction** (extracting k
 - (extreme stretch goal) Predicate/quantifier reasoning
 
 # 💻 Installation
-To run the scripts, you will need the following packages and libraries installed:
+This program runs on Python3 and Tensorflow.  So first make sure you have these installed:
+- **Python:** [Download](https://www.python.org/downloads/) and install any version >= 3.x
+- **Tensorflow 2.x:** [Installation Instructions](https://www.tensorflow.org/install/pip)
+    - Make sure to install any version 2.x
+    - This should also install the Keras front-end.
+      For development I'm using the `tf-nightly`, which is probably your best bet for getting this to work.
 
-- Python (obviously), any version >= 3.x
-- tensorflow 2.x
-    - Installation instructions:
-      https://www.tensorflow.org/install/pip
-      This should also install the Keras front-end.
-      For development I used the `tf-nightly`, which is probably your best bet for getting this to work.
-- pyparsing >= 3.0.x
-    - `python3 -m pip install pyparsing`
-      I used version 3.0.7 for development.  Note that older versions
+In addition, you will need the following Python libraries:
+- **Pyparsing** >= 3.0.x  via  `python3 -m pip install pyparsing`
+    - I used version 3.0.7 for development.  Note that older versions
       (<= 3.0.x) use deprecated function names, and are not compatible
       with our scripts at present.
-- numpy >= 1.22.x
-    - `python3 -m pip install numpy`
-      Older versions will probably do just fine.
+- **Numpy** >= 1.22.x  via  `python3 -m pip install numpy`
+    - Older versions will probably do just fine.
 
 Once you have all of the dependencies installed, in the 
 topmost directory run
 ```
 python3 -m pip install -e .
 ```
+to install.  If this is successful, you can now `import neuralsemantics.core.*` in your Python programs!
 
 
 
@@ -59,8 +58,8 @@ What you _can_ do with it is hand-craft a neural network and infer some things a
 To get you started, try running the following file (with Python3).  This file creates a small feed-forward network model from the usual parameters, then evaluates its expectations (about whether penguins fly) before and after learning.
 
 ```python
-from BFNN import *
-from Model import *
+from neuralsemantics.core.Model import *
+from neuralsemantics.core.BFNN import *
 
 # An example that illustrates how Hebbian learning can learn
 # a counterexample to a conditional while preserving the conditional.
