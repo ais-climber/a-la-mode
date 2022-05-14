@@ -24,6 +24,7 @@ A neuro-symbolic interface, intended for both **model extraction** (extracting k
 - Proper sigmoid activation functions
 - Plug-and-play with your existing Tensorflow model
 - Learning via backpropagation (!)
+- (stretch goal) Nice user interface for editing/updating knowledge bases
 - (stretch goal) Tasks beyond classification
 - (extreme stretch goal) Predicate/quantifier reasoning
 
