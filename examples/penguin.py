@@ -9,7 +9,8 @@
 # certain animals (that share features with penguins)
 # that *don't* fly.
 
-from neuralsemantics.core import BFNN, Model
+from neuralsemantics.BFNN import BFNN
+from neuralsemantics.Model import Model
 
 nodes = set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'])
 layers = [['a', 'b', 'c', 'd', 'e'], ['f', 'g'], ['h']]
