@@ -26,6 +26,29 @@ A neuro-symbolic interface, intended for both **model extraction** (extracting k
 - (extreme stretch goal) Predicate/quantifier reasoning
 
 # 💻 Installation
+To run the scripts, you will need the following packages and libraries installed:
+
+- Python (obviously), any version >= 3.x
+- tensorflow 2.x
+    - Installation instructions:
+      https://www.tensorflow.org/install/pip
+      This should also install the Keras front-end.
+      For development I used the `tf-nightly`, which is probably your best bet for getting this to work.
+- pyparsing >= 3.0.x
+    - `python3 -m pip install pyparsing`
+      I used version 3.0.7 for development.  Note that older versions
+      (<= 3.0.x) use deprecated function names, and are not compatible
+      with our scripts at present.
+- numpy >= 1.22.x
+    - `python3 -m pip install numpy`
+      Older versions will probably do just fine.
+
+Once you have all of the dependencies installed, in the 
+topmost directory run
+```
+python3 -m pip install -e .
+```
+
 
 
 # :brain: Trying It Out
@@ -33,7 +56,7 @@ This program is currently in development, and many of the planned features invol
 
 What you _can_ do with it is hand-craft a neural network and infer some things about what the net knows, expects, and learns.  (There is planned support for being able to plug-and-play with your own Tensorflow model.) 
 
-To get you started, copy the following into a file within your `neural-semantics/` directory -- say `neural-semantics/penguin.py`.  Now navigate to this directory in your terminal and run `python3 penguin.py` (or `py penguin.py` for Windows).
+To get you started, try running the following file (with Python3).  This file creates a small feed-forward network model from the usual parameters, then evaluates its expectations (about whether penguins fly) before and after learning.
 
 ```python
 from BFNN import *
