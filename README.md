@@ -60,10 +60,9 @@ If this is successful, you can now `import neuralsemantics` in your Python progr
 # :brain: Trying It Out
 At the moment, this program lets you hand-craft a neural network and infer some things about what the net knows, expects, and learns.  (There is planned support for being able to plug-and-play with your own Tensorflow model.) 
 
-To get you started, try running the example program
-```
-python3 examples/penguin.py
-```
+To get you started, run the example program `examples/penguin.py`.
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1IEBTRjvGWeIWUxW1tlDsY-FQjUBQS_Dp?usp=sharing)
 ```python
 from neuralsemantics.BFNN import BFNN
 from neuralsemantics.Model import Model
