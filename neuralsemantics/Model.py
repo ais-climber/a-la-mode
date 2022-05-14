@@ -65,11 +65,11 @@ class Model:
                 return set()
             else:
                 return set(self.net.nodes)
-        elif e[0] in ['typ', '◻']:
+        elif e[0] in ['knows', 'K']:
+            return self.net.reachable(self._eval(e[1]))
+        elif e[0] in ['typ', 'T']:
             return self.net.propagate(self._eval(e[1]))
-        elif e[1] in ['typicallyimplies', '⇒']:
-            return self._eval([['◻', e[0]], '→', e[2]])
-        elif e[1] in ['update', '+']:
+        elif e[1] in ['up', '+']:
             new_net = self.net.hebb_update(self._eval(e[0]))
             new_model = Model(new_net, self.prop_map)
             return new_model._eval(e[2])
@@ -88,27 +88,28 @@ class Model:
         FUTURE FUNCTIONALITY: Support for interpreting backpropagation
           as a dynamic update operator
         """
-        proposition = Word(alphas)
+        restricted_alphas = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJLMNOPQRSUVWXYZ"
+        proposition = Word(restricted_alphas)
         grammar = infix_notation(proposition | "bot" | "top" | "⊥" | "⊤",
             [
                 # Support for english longhand (easier to type)
-                ('update',      2, OpAssoc.RIGHT),
+                ('up',      2, OpAssoc.RIGHT),
+                ('knows',     1, OpAssoc.RIGHT),
                 ('typ',     1, OpAssoc.RIGHT),
                 ('not',     1, OpAssoc.RIGHT),
                 ('and',     2, OpAssoc.LEFT),
                 ('or',      2, OpAssoc.LEFT),
                 ('implies', 2, OpAssoc.RIGHT),
                 ('iff',     2, OpAssoc.RIGHT),
-                ('typimplies', 2, OpAssoc.RIGHT),
                 # Support for ascii symbols (easier to read)
                 ('+', 2, OpAssoc.RIGHT),
-                ('◻', 1, OpAssoc.RIGHT),
+                ('K', 1, OpAssoc.RIGHT),
+                ('T', 1, OpAssoc.RIGHT),
                 ('¬', 1, OpAssoc.RIGHT),
                 ('∧', 2, OpAssoc.LEFT),
                 ('∨', 2, OpAssoc.LEFT),
                 ('→', 2, OpAssoc.RIGHT),
-                ('↔', 2, OpAssoc.RIGHT),
-                ('⇒', 2, OpAssoc.RIGHT)
+                ('↔', 2, OpAssoc.RIGHT)
             ])
 
         return grammar.parse_string(formula)
@@ -172,20 +173,31 @@ class Model:
 if __name__ == "__main__":
     # Testing parsing
     ParserElement.enablePackrat()
-    proposition = Word(alphas)
+    restricted_alphas = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJLMNOPQRSUVWXYZ"
+    proposition = Word(restricted_alphas)
     grammar = infix_notation(proposition | "bot" | "top" | "⊥" | "⊤",
         [
+            # Support for english longhand (easier to type)
+            ('up',      2, OpAssoc.RIGHT),
+            ('knows',     1, OpAssoc.RIGHT),
+            ('typ',     1, OpAssoc.RIGHT),
+            ('not',     1, OpAssoc.RIGHT),
+            ('and',     2, OpAssoc.LEFT),
+            ('or',      2, OpAssoc.LEFT),
+            ('implies', 2, OpAssoc.RIGHT),
+            ('iff',     2, OpAssoc.RIGHT),
             # Support for ascii symbols (easier to read)
             ('+', 2, OpAssoc.RIGHT),
-            ('◻', 1, OpAssoc.RIGHT),
+            ('K', 1, OpAssoc.RIGHT),
+            ('T', 1, OpAssoc.RIGHT),
             ('¬', 1, OpAssoc.RIGHT),
             ('∧', 2, OpAssoc.LEFT),
             ('∨', 2, OpAssoc.LEFT),
             ('→', 2, OpAssoc.RIGHT),
-            ('↔', 2, OpAssoc.RIGHT),
-            ('⇒', 2, OpAssoc.RIGHT)
+            ('↔', 2, OpAssoc.RIGHT)
         ])
     #print(grammar.parse_string("(p+ □ q) → (□ p+ q)"))
-    print("Example 1: ", grammar.parse_string("(q → p) → ((q+ (◻r)) → (p+ (◻r)))"))
-    print("Example 2: ", grammar.parse_string("((¬(P ∧ (P+ A)) ↔ ⊤) ∧ ((P ∧ (P+ A)) ⇒ (P+ B))) ∨ ((P ∧ (P+ A)) ↔ ⊤) ∧ ((P+ A) ⇒ (P+ B)))"))
+    print("Example 1: ", grammar.parse_string("(q → p) → ((q+ (T r)) → (p+ (T r)))"))
+    print("Example 2: ", grammar.parse_string("((¬(P ∧ (P+ A)) ↔ ⊤) ∧ ((P ∧ (P+ A)) → (P+ B))) ∨ ((P ∧ (P+ A)) ↔ ⊤) ∧ ((P+ A) → (P+ B)))"))
+    print("Example 2: ", grammar.parse_string("((T oronto) implies ennessee) and otoro"))
 

@@ -97,6 +97,26 @@ class BFNN:
         layer_output = get_nth_layer_output(inp)[0][0]
         return list(layer_output)
 
+    def reachable(self, signal):
+        """
+        Function to get the set of nodes that are reachable from 'signal',
+        in the sense of graph-reachability.
+        """
+        result = set()
+
+        # Perform DFS on each node, and put the visited nodes in the result set.
+        stack = list(signal)
+        while stack != []:
+            curr = stack.pop()
+            if curr not in result:
+                result.add(curr)
+                for (e, w) in self.weights.items():
+                    if e[0] == curr:
+                        next = e[1]
+                        stack.append(next)
+
+        return result
+
     def propagate(self, signal):
         """
         Function to get the propagation of a signal 'signal'.
