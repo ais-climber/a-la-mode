@@ -1,6 +1,8 @@
 # Neural Semantics
 A neuro-symbolic interface, intended for both **model extraction** (extracting knowledge from a net) as well as **model building** (building a net from a knowledge base).  The name comes from the core idea -- that the internal dynamics of neural networks can be used as formal semantics of knowledge bases.
 
+**NOTE:** This program is currently **very much in development**, and many of the planned features involve significant research efforts (this is my PhD).  So what the program can do right now is somewhat limited.  
+
 ![image](https://user-images.githubusercontent.com/7096372/168408611-afc0ed06-ade7-4854-98f8-e8d564765c33.png)
 
 ## :heavy_check_mark: Supported Features:
@@ -50,9 +52,7 @@ If this is successful, you can now `import neuralsemantics.core.*` in your Pytho
 
 
 # :brain: Trying It Out
-This program is currently in development, and many of the planned features involve significant research efforts (this is my PhD).  So what the program can do right now is somewhat limited.  
-
-What you _can_ do with it is hand-craft a neural network and infer some things about what the net knows, expects, and learns.  (There is planned support for being able to plug-and-play with your own Tensorflow model.) 
+At the moment, this program lets you hand-craft a neural network and infer some things about what the net knows, expects, and learns.  (There is planned support for being able to plug-and-play with your own Tensorflow model.) 
 
 To get you started, try running the following file (with Python3).  This file creates a small feed-forward network model from the usual parameters, then evaluates its expectations (about whether penguins fly) before and after learning.
 
