@@ -1,4 +1,4 @@
-![image](https://user-images.githubusercontent.com/7096372/168408526-8ca779d8-f095-4266-8159-1ccbfcad4904.png)
+![image](https://user-images.githubusercontent.com/7096372/168408564-21b8d512-926a-4c8f-a06c-7767f3a360c9.png)
 # Neural Semantics
 A neuro-symbolic interface, intended for both **model extraction** (extracting knowledge from a net) as well as **model building** (building a net from a knowledge base).  The name comes from the core idea -- that the internal dynamics of neural networks can be used as formal semantics of knowledge bases.
 
