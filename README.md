@@ -41,12 +41,11 @@ In addition, you will need the following Python libraries:
 - **Numpy** >= 1.22.x  via  `python3 -m pip install numpy`
     - Older versions will probably do just fine.
 
-Once you have all of the dependencies installed, in the 
-topmost directory run
+Once you have all of the dependencies installed, clone this repo and run (within this directory):
 ```
 python3 -m pip install -e .
 ```
-to install.  If this is successful, you can now `import neuralsemantics.core.*` in your Python programs!
+If this is successful, you can now `import neuralsemantics.core.*` in your Python programs!
 
 
 
