@@ -99,6 +99,6 @@ networks: A sound approach**.  [[pdf]](https://www.sciencedirect.com/science/art
 of self-organising maps**. [[pdf]](https://arxiv.org/pdf/2103.06854.pdf)
 
 # :incoming_envelope: Contact
-If something is broken, you can't run the program, or you have any suggestions for features, feel free to file an issue.  If you are interested in contributing to smaller TODOs (bug fixes, quality of life), just make the change and submit a pull request. (I'd be surprised and flattered!)
-
-Most of the bigger TODOs depend on more theoretical work in neuro-symbolic AI (i.e. proving theorems about Neural Semantics).  If you're interested in collaborating, see my [contact](https://ais-climber.github.io/contact/) page.
+- Is something broken?  You can't run the program?  Suggestions for features?  Feel free to file an issue!
+- Want to contribute to bug fixes/quality of life improvements?  Submit a pull request!  (I'd be surprised and flattered!)
+- Interested in collaborating on the bigger (i.e. open research question) TODOs?  Head over to my [contact](https://ais-climber.github.io/contact/) page!
