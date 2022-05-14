@@ -48,47 +48,54 @@ In addition, you will need the following Python libraries:
 
 Once you have all of the dependencies installed, clone this repo and run (within this directory):
 ```
-python3 -m pip install -e .
+python3 setup.py install
 ```
-If this is successful, you can now `import neuralsemantics.core.*` in your Python programs!
-
+If this is successful, you can now `import neuralsemantics.*` in your Python programs!
 
 
 # :brain: Trying It Out
 At the moment, this program lets you hand-craft a neural network and infer some things about what the net knows, expects, and learns.  (There is planned support for being able to plug-and-play with your own Tensorflow model.) 
 
-To get you started, try running the following file (with Python3).  This file creates a small feed-forward network model from the usual parameters, then evaluates its expectations (about whether penguins fly) before and after learning.
-
+To get you started, try running the example program
+```
+python3 examples/penguin.py
+```
 ```python
-from neuralsemantics.core.Model import *
-from neuralsemantics.core.BFNN import *
+from neuralsemantics.BFNN import BFNN
+from neuralsemantics.Model import Model
 
-# An example that illustrates how Hebbian learning can learn
-# a counterexample to a conditional while preserving the conditional.
-# In this case, the net learns that penguins don't fly, while preserving
-# the fact that typically birds *do* fly.
 nodes = set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'])
 layers = [['a', 'b', 'c', 'd', 'e'], ['f', 'g'], ['h']]
-weights = {('a', 'f'): 1.0, ('a', 'g'): 0.0, ('b', 'f'): 0.0, ('b', 'g'): -2.0, 
-           ('c', 'f'): 0.0, ('c', 'g'): 3.0, ('d', 'f'): 0.0, ('d', 'g'): 3.0,
-           ('e', 'f'): 0.0, ('e', 'g'): 3.0, ('f', 'h'): 2.0, ('g', 'h'): -2.0}
+weights = {('a', 'f'): 1.0, ('a', 'g'): 0.0, 
+           ('b', 'f'): 0.0, ('b', 'g'): -2.0, 
+           ('c', 'f'): 0.0, ('c', 'g'): 3.0, 
+           ('d', 'f'): 0.0, ('d', 'g'): 3.0,
+           ('e', 'f'): 0.0, ('e', 'g'): 3.0,
+           ('f', 'h'): 2.0, ('g', 'h'): -2.0}
 threshold = 0.0
 rate = 1.0
 prop_map = {'bird': {'a'}, 'penguin': {'a', 'b'}, 
             'orca': {'b', 'c'}, 'zebra': {'b', 'd'}, 
             'panda': {'b', 'e'}, 'flies': {'h'}}
+
 net = BFNN(nodes, layers, weights, threshold, rate)
 model = Model(net, prop_map)
 
-print("> penguin → bird \n    ", model.is_model("penguin → bird"), "\n")
-print("> bird ⇒ flies \n    ", model.is_model("(T bird) → flies"), "\n")
-print("> penguin ⇒ flies \n    ", model.is_model("(T penguin) → flies"), "\n")
-print("> orca+ zebra+ panda+\n>  (bird ⇒ flies) \n    ", model.is_model("orca+ (zebra+ (panda+ ((T bird) → flies)))"), "\n")
-print("> orca+ zebra+ panda+\n>  (penguin ⇒ flies) \n    ", model.is_model("orca+ (zebra+ (panda+ ((T penguin) → flies)))"))
+print("penguin → bird : ", model.is_model("penguin implies bird"))
+print("bird ⇒ flies : ", model.is_model("(typ bird) implies flies"))
+print("penguin ⇒ flies : ", model.is_model("(typ penguin) implies flies"))
+print("orca+ zebra+ panda+ (bird ⇒ flies) : ", model.is_model("orca+ (zebra+ (panda+ ((typ bird) implies flies)))")) # should be True
+print("orca+ zebra+ panda+ (penguin ⇒ flies) : ", model.is_model("orca+ (zebra+ (panda+ ((typ penguin) implies flies)))")) # should be False
 ```
 
+This file shows how you can hand-code a small feed-forward network model and evaluate its expectations (about whether penguins fly) before and after learning.  Notice that we need to give `prop_map` as input to the net.  The keys of `prop_map` are atomic facts that _we know ahead of time_ produce a specific activation.  e.g. `'penguin': {'a', 'b'}` indicates that a 'penguin' image will always activate `'a'` and `'b'`.  Usually these atomic facts are inputs and outputs, although occasionally we have prior knowledge of hidden states as well.
+
 ## Language Syntax
-The functions `model.is_model(expr)` and `model.interpret(expr)` accept the following syntax:
+The key functions for you to use are 
+- `model.is_model(expr)` (checks if `expr` is follows in the net) 
+- `model.interpret(expr)` (gives the set of neurons denoting `expr`).  
+
+Here, `expr` accepts the following syntax:
 | Easy to Write | Easy to Read |
 | -------------- | --------- |
 | `not P`        | `¬ P`     |
