@@ -1,4 +1,4 @@
-from neuralsemantics import BFNN
+from neuralsemantics.BFNN import BFNN
 from pyparsing import *
 import sys
 
