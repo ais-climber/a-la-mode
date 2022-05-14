@@ -85,6 +85,7 @@ print("> orca+ zebra+ panda+\n>  (bird ⇒ flies) \n    ", model.is_model("orca+
 print("> orca+ zebra+ panda+\n>  (penguin ⇒ flies) \n    ", model.is_model("orca+ (zebra+ (panda+ ((T penguin) → flies)))"))
 ```
 
+## Language Syntax
 The functions `model.is_model(expr)` and `model.interpret(expr)` accept the following syntax:
 | Easy to Write | Easy to Read |
 | -------------- | --------- |
@@ -99,9 +100,17 @@ The functions `model.is_model(expr)` and `model.interpret(expr)` accept the foll
 
 `P` and `Q` can be replaced by almost any string of alphas, with one major exception:  Avoid using capital `T` and capital `K`.  The convention I recommend is to use `A`, `B`, `C`, ... for variables, and `lowercase`, `strings` when you want to use actual strings.  Also, parsing is somewhat experimental, so be generous with parentheses.
 
-For logicians/knowledge engineers: `K` acts like an S4 modality (think "knows P"), `T` acts like a non-normal ENT4 modality (turns out to be "typically P" or "the typical P".  We can also express nonmonotonic (defeasible) conditionals in this language -- `Typ P implies Q` is a loop-cumulative conditional.  `P+` is a dynamic modality that only influences `T` (it reduces over the other operators).
+## What the Syntax Means
+Each operator has an interpretation 1) as an operator in logic, and 2) as some internal behavior of the neural network:
 
-If you want insight into _why_ these specific modal operators, note that each modal operator corresponds directly to some internal behavior of the neural network.  The mapping is:
+### Logical Interpretation
+| Syntax      | Properties  | Reading |
+| ----------- | -------------------|------------------------ |
+| `K P`       | S4 modality  | "knows P" |
+| `T P`       | non-normal ENT4 modality | "typically P"/"the typical P"  |
+|  `P+ Q`     | dynamic modality that only meaningfully interacts with `T` | "upgrade preference for P, eval Q" |
+
+### Neural Interpretation 
 | Syntax      | Neural Network  |
 | ----------- | ------------------------------------------- |
 | `K P`       | The neurons **reachable** from the set `P`  |
