@@ -6,7 +6,7 @@ A neuro-symbolic interface, intended for both **model extraction** (extracting k
 ![image](https://user-images.githubusercontent.com/7096372/168408611-afc0ed06-ade7-4854-98f8-e8d564765c33.png)
 
 ## :heavy_check_mark: Supported Features:
-- Model extraction
+- Model extraction (assuming we know the meaning of base atoms)
 - Countermodel generation (via a random search, no construction yet)
 - Modal and conditional reasoning
 - Inferring what the net has learned before and after learning
@@ -17,6 +17,7 @@ A neuro-symbolic interface, intended for both **model extraction** (extracting k
 - Nets must be used for classification tasks in discrete domains
 - Nets learn via (unsupervised) Hebbian learning
 - Knowledge bases are expressed in a certain restricted modal syntax (see below)
+- Base atoms (input, output, and perhaps hidden states) must be given as input
 
 ## 📝 Planned Features:
 - Model building
@@ -26,6 +27,7 @@ A neuro-symbolic interface, intended for both **model extraction** (extracting k
 - Learning via backpropagation (!)
 - (stretch goal) Nice user interface for editing/updating knowledge bases
 - (stretch goal) Tasks beyond classification
+- (stretch goal) Automatically producing base atoms from a dataset and net
 - (extreme stretch goal) Predicate/quantifier reasoning
 
 # 💻 Installation
