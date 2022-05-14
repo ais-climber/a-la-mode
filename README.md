@@ -23,7 +23,7 @@ A neuro-symbolic interface, intended for both **model extraction** (extracting k
 - Learning via backpropagation (!)
 - Predicate/quantifier reasoning
 
-# 💻 Running the Program
+# 💻 Installation
 
 
 # :brain: Trying It Out
