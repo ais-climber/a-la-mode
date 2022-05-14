@@ -1,5 +1,4 @@
-from neuralsemantics.core.BFNN import *
-from neuralsemantics.core.Model import *
+from neuralsemantics.core import BFNN, Model
 
 nodes = set(['a', 'b', 'c', 'd'])
 layers = [['a'], ['b', 'c'], ['d']]

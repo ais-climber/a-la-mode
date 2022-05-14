@@ -1,6 +1,5 @@
 # Example 1 - Monotonicity Failure
-from neuralsemantics.core.BFNN import *
-from neuralsemantics.core.Model import *
+from neuralsemantics.core import BFNN, Model
 
 nodes = set(["a", "b", "c", "d", "e"])
 layers = [["a", "b"], ["c", "d"], ["e"]]
