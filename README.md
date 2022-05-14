@@ -98,6 +98,7 @@ The key functions for you to use are
 Here, `expr` accepts the following syntax:
 | Easy to Write | Easy to Read |
 | -------------- | --------- |
+| `top`, `bot`   | `⊤`, `⊥` |
 | `not P`        | `¬ P`     |
 | `P and Q`      | `P ∧ Q`   |
 | `P or Q`       | `P ∨ Q`   |
