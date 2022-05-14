@@ -77,7 +77,7 @@ The functions `model.is_model(expr)` and `model.interpret(expr)` accept the foll
 
 `P` and `Q` can be replaced by almost any string of alphas, with one major exception:  Avoid using capital `T` and capital `K`.  The convention I recommend is to use `A`, `B`, `C`, ... for variables, and `lowercase`, `strings` when you want to use actual strings.  Also, parsing is somewhat experimental, so be generous with parentheses.
 
-For logicians/knowledge engineers: `K` acts like an S4 modality (think "knows P"), `T` acts like a non-normal ENT4 modality (turns out to be "typically P" or "the typical P".  We can also express nonmonotonic (defeasible) conditionals in this language -- `Typ P implies Q` is a loop-cumulative conditional.
+For logicians/knowledge engineers: `K` acts like an S4 modality (think "knows P"), `T` acts like a non-normal ENT4 modality (turns out to be "typically P" or "the typical P".  We can also express nonmonotonic (defeasible) conditionals in this language -- `Typ P implies Q` is a loop-cumulative conditional.  `P+` is a dynamic modality that only influences `T` (it reduces over the other operators).
 
 If you want insight into _why_ these specific modal operators, note that each modal operator corresponds directly to some internal behavior of the neural network.  The mapping is:
 | Syntax      | Neural Network  |
