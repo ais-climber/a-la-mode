@@ -29,12 +29,9 @@ prop_map = {'bird': {'a'}, 'penguin': {'a', 'b'},
 net = BFNN(nodes, layers, weights, threshold, rate)
 model = Model(net, prop_map)
 
-print("penguin → bird : ", model.is_model("penguin → bird"))
-print("bird ⇒ flies : ", model.is_model("bird ⇒ flies"))
-print("penguin ⇒ flies : ", model.is_model("penguin ⇒ flies"))
+print("penguin → bird : ", model.is_model("penguin implies bird"))
+print("bird ⇒ flies : ", model.is_model("(typ bird) implies flies"))
+print("penguin ⇒ flies : ", model.is_model("(typ penguin) implies flies"))
 print()
-print("orca+ zebra+ panda+ (bird ⇒ flies) : ", model.is_model("orca+ (zebra+ (panda+ (bird ⇒ flies)))")) # should be True
-print("orca+ zebra+ panda+ (penguin ⇒ flies) : ", model.is_model("orca+ (zebra+ (panda+ (penguin ⇒ flies)))")) # should be False
-
-# Is this a counterexample to monotonicity?
-print(model.is_model("(orca+ (orca+ (orca+ (◻penguin)))) → (orca+ (orca+ (orca+ (◻bird))))")) # Hope it is False
+print("orca+ zebra+ panda+ (bird ⇒ flies) : ", model.is_model("orca+ (zebra+ (panda+ ((typ bird) implies flies)))")) # should be True
+print("orca+ zebra+ panda+ (penguin ⇒ flies) : ", model.is_model("orca+ (zebra+ (panda+ ((typ penguin) implies flies)))")) # should be False

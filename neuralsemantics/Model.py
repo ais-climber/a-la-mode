@@ -65,7 +65,7 @@ class Model:
                 return set()
             else:
                 return set(self.net.nodes)
-        elif e[0] in ['prefers', '◻']:
+        elif e[0] in ['typ', '◻']:
             return self.net.propagate(self._eval(e[1]))
         elif e[1] in ['typicallyimplies', '⇒']:
             return self._eval([['◻', e[0]], '→', e[2]])
@@ -93,13 +93,13 @@ class Model:
             [
                 # Support for english longhand (easier to type)
                 ('update',      2, OpAssoc.RIGHT),
-                ('prefers',    1, OpAssoc.RIGHT),
+                ('typ',     1, OpAssoc.RIGHT),
                 ('not',     1, OpAssoc.RIGHT),
                 ('and',     2, OpAssoc.LEFT),
                 ('or',      2, OpAssoc.LEFT),
                 ('implies', 2, OpAssoc.RIGHT),
                 ('iff',     2, OpAssoc.RIGHT),
-                ('typicallyimplies', 2, OpAssoc.RIGHT),
+                ('typimplies', 2, OpAssoc.RIGHT),
                 # Support for ascii symbols (easier to read)
                 ('+', 2, OpAssoc.RIGHT),
                 ('◻', 1, OpAssoc.RIGHT),
