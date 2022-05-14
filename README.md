@@ -50,7 +50,11 @@ Once you have all of the dependencies installed, clone this repo and run (within
 ```
 python3 setup.py install
 ```
-If this is successful, you can now `import neuralsemantics.*` in your Python programs!
+or, if that doesn't work (e.g. in a Google Colab environment):
+```
+pip3 install .
+```
+If this is successful, you can now `import neuralsemantics` in your Python programs!
 
 
 # :brain: Trying It Out
