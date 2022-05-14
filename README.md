@@ -13,7 +13,7 @@ A neuro-symbolic interface, intended for both **model extraction** (extracting k
 - Nets learn via (unsupervised) Hebbian learning
 - Knowledge bases are expressed in a certain restricted modal syntax (see below)
 
-## 📝 Planned Features
+## 📝 Planned Features:
 - Model building
 - Counter-model building
 - Proper sigmoid activation functions
@@ -23,11 +23,52 @@ A neuro-symbolic interface, intended for both **model extraction** (extracting k
 - Predicate/quantifier reasoning
 
 # :brain: The Translation
+
+| Syntax      | Neural Network  |
+| ----------- | ------------------------------------------- |
+| `K P`       | The neurons **reachable** from the set `P`  |
+| `T P`       | **Forward-Propagation** of `P`              |
+|  `P+ Q`     | Do **Hebbian Update** on `P`, then eval `Q` |
+
+Conditionals are expressible in this language:  P ⇒ Q can be expressed as `TP 🠒 Q`.
+
 ( so sentences in a knowledge base correspond to the dynamics of the net)
 
-# 💻 How to Install and Use
+# 💻 Running the Program
 
 
+# :brain: Trying It Out
+This program is currently in development, and many of the planned features involve significant research efforts.  So what the program can do right now is somewhat limited.  What you _can_ do with it is hand-craft a neural network and infer some things about what the net knows, expects, and learns.  (There is planned support for being able to plug-and-play with your own Tensorflow model.) 
+
+To get you started, copy the following into a file within your `neural-semantics/` directory -- say `neural-semantics/penguin.py`.  Now navigate to this directory in your terminal and run `python3 penguin.py` (or `py penguin.py` for Windows).
+
+```
+from BFNN import *
+from Model import *
+
+# An example that illustrates how Hebbian learning can learn
+# a counterexample to a conditional while preserving the conditional.
+# In this case, the net learns that penguins don't fly, while preserving
+# the fact that typically birds *do* fly.
+nodes = set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'])
+layers = [['a', 'b', 'c', 'd', 'e'], ['f', 'g'], ['h']]
+weights = {('a', 'f'): 1.0, ('a', 'g'): 0.0, ('b', 'f'): 0.0, ('b', 'g'): -2.0, 
+           ('c', 'f'): 0.0, ('c', 'g'): 3.0, ('d', 'f'): 0.0, ('d', 'g'): 3.0,
+           ('e', 'f'): 0.0, ('e', 'g'): 3.0, ('f', 'h'): 2.0, ('g', 'h'): -2.0}
+threshold = 0.0
+rate = 1.0
+prop_map = {'bird': {'a'}, 'penguin': {'a', 'b'}, 
+            'orca': {'b', 'c'}, 'zebra': {'b', 'd'}, 
+            'panda': {'b', 'e'}, 'flies': {'h'}}
+net = BFNN(nodes, layers, weights, threshold, rate)
+model = Model(net, prop_map)
+
+print("> penguin → bird \n    ", model.is_model("penguin → bird"), "\n")
+print("> bird ⇒ flies \n    ", model.is_model("bird ⇒ flies"), "\n")
+print("> penguin ⇒ flies \n    ", model.is_model("penguin ⇒ flies"), "\n")
+print("> orca+ zebra+ panda+\n>  (bird ⇒ flies) \n    ", model.is_model("orca+ (zebra+ (panda+ (bird ⇒ flies)))"), "\n")
+print("> orca+ zebra+ panda+\n>  (penguin ⇒ flies) \n    ", model.is_model("orca+ (zebra+ (panda+ (penguin ⇒ flies)))"))
+```
 
 
 # 🔗 Links and Resources
