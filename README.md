@@ -6,7 +6,7 @@ A neuro-symbolic interface, intended for both **model checking** ("does the net 
 ![image](https://user-images.githubusercontent.com/7096372/168408611-afc0ed06-ade7-4854-98f8-e8d564765c33.png)
 
 ## :heavy_check_mark: Supported Features:
-- Model extraction (assuming we know the meaning of base atoms)
+- Model checking (assuming we know the meaning of base atoms)
 - Countermodel generation (via a random search, no construction yet)
 - Modal and conditional reasoning
 - Inferring what the net has learned before and after learning
