@@ -1,5 +1,5 @@
 # Neural Semantics
-A neuro-symbolic interface, intended for both **model extraction** (extracting knowledge from a net) as well as **model building** (building a net from a knowledge base).  The name comes from the core idea -- that the internal dynamics of neural networks can be used as formal semantics of knowledge bases.
+A neuro-symbolic interface, intended for both **model checking** ("does the net satisfy P?") as well as **model building** ("construct a net that satisfies P.")  The name comes from the core idea -- that the internal dynamics of neural networks can be used as formal semantics of knowledge bases.
 
 **NOTE:** This program is currently **very much in development**, and many of the planned features involve significant research efforts (this is my PhD).  So what the program can do right now is somewhat limited.  
 
