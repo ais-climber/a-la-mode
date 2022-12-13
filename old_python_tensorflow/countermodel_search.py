@@ -1,5 +1,5 @@
-from neuralsemantics.BFNN import BFNN
-from neuralsemantics.Model import Model
+from python_model_checking.BFNN import BFNN
+from python_model_checking.Model import Model
 
 import random as rand
 import itertools
