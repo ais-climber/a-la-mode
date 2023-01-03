@@ -1,5 +1,5 @@
-# Neural Semantics
-A neuro-symbolic interface that can be use for **model checking** ("does the net satisfy P?") as well as **model building** ("construct a net that satisfies P.")  The name comes from the core idea: We can interpret logical symbols by way of sets of neurons in a network.
+# Mod: A Neural Network Model Builder
+A suite for neural network **checking** ("does the net satisfy P?") and neural network **building** ("construct a net that satisfies P.")  We do this by leveraging a neuro-symbolic translation between logical symbols and sets of neurons in the network.
 
 **NOTE:** This program is currently **very much in development**, and many of the planned features involve significant research efforts (this is my PhD).  So what the program can do right now is somewhat limited.  
 
