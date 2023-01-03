@@ -1,10 +1,10 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="neuralsemantics", 
+    name="Mod", 
     version="0.3.0",
-    description="Neuro-symbolic interface intended for model extraction and model building",
+    description="A neural network model builder, leveraging a neuro-symbolic interface.",
     # license="MIT",
-    author="Caleb Kisby",
+    author="Caleb Schultz Kisby",
     packages=find_packages()
 )

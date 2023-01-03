@@ -1,5 +1,5 @@
-import python_model_checking as tf
-from python_model_checking.keras.layers import Input, Dense
+import tensorflow as tf
+from tf.keras.layers import Input, Dense
 from keras import backend as K
 import numpy as np
 

@@ -1,5 +1,5 @@
-from python_model_checking.BFNN import BFNN
-from python_model_checking.Model import Model
+from Mod.BFNN import BFNN
+from Mod.Model import Model
 
 import random as rand
 import itertools

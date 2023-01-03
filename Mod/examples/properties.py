@@ -4,7 +4,7 @@
 # We should hope that no countermodels are found
 # (since otherwise there is an error in our proofs!)
 
-from python_model_checking.countermodel_search import countermodel_search
+from Mod.countermodel_search import countermodel_search
 
 # S4 Modal Laws for K
 countermodel_search("(K(A ∧ B)) ↔ (K A ∧ K B)", 100) # K

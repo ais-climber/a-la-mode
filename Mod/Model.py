@@ -1,4 +1,4 @@
-from python_model_checking.BFNN import BFNN
+from Mod.BFNN import BFNN
 from pyparsing import *
 import sys
 
