@@ -1,5 +1,5 @@
 # Neural Semantics
-A neuro-symbolic interface, intended for both **model checking** ("does the net satisfy P?") as well as **model building** ("construct a net that satisfies P.")  The name comes from the core idea -- that the internal dynamics of neural networks can be used as formal semantics of knowledge bases.
+A neuro-symbolic interface that can be use for **model checking** ("does the net satisfy P?") as well as **model building** ("construct a net that satisfies P.")  The name comes from the core idea: We can interpret logical symbols by way of sets of neurons in a network.
 
 **NOTE:** This program is currently **very much in development**, and many of the planned features involve significant research efforts (this is my PhD).  So what the program can do right now is somewhat limited.  
 
@@ -23,6 +23,7 @@ A neuro-symbolic interface, intended for both **model checking** ("does the net 
 - Model building
 - Counter-model building
 - Proper sigmoid activation functions
+- Recurrent nets (LSTMs and Transformers)
 - Plug-and-play with your existing Tensorflow model
 - Learning via backpropagation (!)
 - (stretch goal) Nice user interface for editing/updating knowledge bases
