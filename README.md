@@ -1,7 +1,7 @@
-# Mod: A Neural Network Model Builder
+# à la Mode: A Neural Network Model Builder
 A Python (Tensorflow) suite for neural network **checking** ("does the net satisfy P?") and neural network **building** ("construct a net that satisfies P.")  We do this by leveraging a neuro-symbolic translation between logical symbols and sets of neurons in the network.
 
-Mod is the more hasty and confident sister of [Argyle](https://github.com/ais-climber/argyle). Both share the same core features, but Mod releases faster and is easier to use (for those Python+Tensorflow inclined).  However, unlike Argyle, Mod is not formally verified (although it's models are proved correct by hand).
+à la Mode is the more hasty and confident sister of [Argyle](https://github.com/ais-climber/argyle). Both share the same core features, but à la Mode releases faster and is easier to use (for those Python+Tensorflow inclined).  However, unlike Argyle, à la Mode is not formally verified (although it's models are proved correct by hand).
 
 **NOTE:** This program is currently **very much in development**, and many of the planned features involve significant research efforts (this is my PhD).  So what the program can do right now is somewhat limited.  
 
