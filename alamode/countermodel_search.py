@@ -1,5 +1,5 @@
-from Mod.BFNN import BFNN
-from Mod.Model import Model
+from alamode.Net import Net
+from alamode.InterpretedNet import InterpretedNet
 
 import random as rand
 import itertools
@@ -52,7 +52,7 @@ def generate_random_net(max_elements=25):
     threshold = 0.0
     rate = 1.0
 
-    return BFNN(nodes, layers, weights, threshold, rate)
+    return Net(nodes, layers, weights, threshold, rate)
 
 countermodels = dict()
 def countermodel_search(formula, n, max_elements=25, premises=[]):
@@ -87,16 +87,44 @@ def countermodel_search(formula, n, max_elements=25, premises=[]):
     for i in range(n):
         net = generate_random_net(max_elements)
 
-        alpha = [F.replace('+', '').replace('◻', '').replace('¬', '').replace('∧', '').replace('∨', '').replace('→', '').replace('↔', '').replace('⊤', '').replace('⇒', '').replace('(', '').replace(')', '') 
-            for F in premises+[formula]]
-        propositions = list(set([word for F in alpha for word in F.split()]))
+        # ('::',      2, OpAssoc.RIGHT),
+        # ('know',    1, OpAssoc.RIGHT),
+        # ('typ',     1, OpAssoc.RIGHT),
+        # ('<know>',  1, OpAssoc.RIGHT),
+        # ('<typ>',   1, OpAssoc.RIGHT),
+        # ('not',     1, OpAssoc.RIGHT),
+        # ('and',     2, OpAssoc.LEFT),
+        # ('or',      2, OpAssoc.LEFT),
+        # ('->',      2, OpAssoc.RIGHT),
+        # ('<->',     2, OpAssoc.RIGHT)
+        
+        # WARNING: the order of special_tokens is important!
+        #   e.g. '<know>' must be removed before 'know',
+        #    and '<->' must be removed before '->'
+        special_tokens = ['::', '<know↓>', 'know↓', '<know>', 'know', '<typ>', 'typ', 'not', 'and', 'or', '<->', '->', '(', ')']
+
+        propositions = []
+        for F in premises+[formula]:
+            only_props = F
+
+            for token in special_tokens:
+                only_props = only_props.replace(token, '')
+
+            propositions += only_props.split()
+
+        propositions = list(set(propositions))
         prop_sets = [set(list(rand.sample(net.nodes, k=rand.randint(1, len(net.nodes))))) for P in propositions]
+        
+        # alpha = [F.replace('->', '').replace('<->', '').replace('(', '').replace(')', '') 
+        #     for F in premises+[formula]
+        #     if F not in []]
+        # propositions = list(set([word for F in alpha for word in F.split()]))
         
         # We permute the order of the propositions in our mapping
         # in case a specific order gives us a countermodel.
         for prop_order in itertools.permutations(propositions):
             prop_map = {prop_order[i] : prop_sets[i] for i in range(len(propositions))}
-            model = Model(net, prop_map)
+            model = InterpretedNet(net, prop_map)
 
             is_model = True
             if premises != []:

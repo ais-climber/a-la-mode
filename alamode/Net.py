@@ -1,12 +1,18 @@
 import tensorflow as tf
-from tf.keras.layers import Input, Dense
+from tensorflow.keras.layers import Input, Dense
 from keras import backend as K
 import numpy as np
+from functools import reduce
+from itertools import chain, combinations
 
-class BFNN:
+class Net:
     def __init__(self, nodes, layers, weights, threshold, rate):
         """
-        Constructor for a BFNN (binary feedforward neural network).
+        Constructor for a Net (binary feedforward neural network).
+        
+        NOTE: Currently our nets must be *binary* and *feedforward*.
+        TODO: Plans to extend this to neural nets used in practice
+              (e.g. fuzzy nets & RNNs)
 
         Parameters:
             'nodes' - a set of strings denoting node labels
@@ -97,7 +103,7 @@ class BFNN:
         layer_output = get_nth_layer_output(inp)[0][0]
         return list(layer_output)
 
-    def reachable(self, signal):
+    def reach(self, signal):
         """
         Function to get the set of nodes that are reachable from 'signal',
         in the sense of graph-reachability.
@@ -114,6 +120,35 @@ class BFNN:
                     if e[0] == curr:
                         next = e[1]
                         stack.append(next)
+
+        return result
+
+    def inverse_reach(self, signal):
+        """
+        Function to get the set of nodes whose reach includes 'signal',
+        i.e. the 'inverse' reach.
+        
+        Formally, we return
+            {x | ∃s ∈ signal. ∀X with s ∉ reach(X^∁). x ∈ X}
+        """
+        result = set()
+
+        all_nodes = set(self.nodes)
+        for x in self.nodes:
+            for s in signal:
+                l = list(all_nodes)
+                powerset = chain.from_iterable(combinations(l, r) for r in range(len(l)+1))
+                
+                Xs = [X for X in powerset if s not in self.reach(all_nodes.difference(X))]
+                Xs_with_x = [bool(x in X) for X in Xs]
+
+                # "s works" iff x is in every such X in Xs
+                s_works = Xs != [] and Xs_with_x.count(Xs_with_x[0]) == len(Xs_with_x)
+
+                # If *some* s works, then x is in the set.
+                if s_works:
+                    result.add(x)
+                    break
 
         return result
 
@@ -186,7 +221,7 @@ class BFNN:
         # (for prettiness, mostly)
         new_weights = {k : v for k , v in new_weights.items() if v != 0.0}
 
-        return BFNN(self.nodes, self.layers, new_weights, self.threshold, self.rate)
+        return Net(self.nodes, self.layers, new_weights, self.threshold, self.rate)
 
     def backprop_update(self, signal):
         """
@@ -204,7 +239,7 @@ class BFNN:
         """
         result = ""
 
-        result += "BFNN\n"
+        result += "Net\n"
         result += f"T = {self.threshold} ; rate = {self.rate}\n"
         result += f"Nodes: {self.nodes}\n"
         result += f"Layers: {self.layers}\n"

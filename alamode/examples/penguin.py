@@ -9,8 +9,10 @@
 # certain animals (that share features with penguins)
 # that *don't* fly.
 
-from Mod.BFNN import BFNN
-from Mod.Model import Model
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+from alamode.Net import Net
+from alamode.InterpretedNet import InterpretedNet
 
 nodes = set(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'])
 layers = [['a', 'b', 'c', 'd', 'e'], ['f', 'g'], ['h']]
@@ -26,12 +28,18 @@ prop_map = {'bird': {'a'}, 'penguin': {'a', 'b'},
             'orca': {'b', 'c'}, 'zebra': {'b', 'd'}, 
             'panda': {'b', 'e'}, 'flies': {'h'}}
 
-net = BFNN(nodes, layers, weights, threshold, rate)
-model = Model(net, prop_map)
+net = Net(nodes, layers, weights, threshold, rate)
+model = InterpretedNet(net, prop_map)
 
-print("penguin → bird : ", model.is_model("penguin implies bird"))
-print("bird ⇒ flies : ", model.is_model("(typ bird) implies flies"))
-print("penguin ⇒ flies : ", model.is_model("(typ penguin) implies flies"))
+print("penguin -> bird : ", model.is_model("penguin -> bird"))
+print("bird => flies : ", model.is_model("(typ bird) -> flies"))
+print("penguin => flies : ", model.is_model("(typ penguin) -> flies"))
 print()
-print("orca+ zebra+ panda+ (bird ⇒ flies) : ", model.is_model("orca+ (zebra+ (panda+ ((typ bird) implies flies)))")) # should be True
-print("orca+ zebra+ panda+ (penguin ⇒ flies) : ", model.is_model("orca+ (zebra+ (panda+ ((typ penguin) implies flies)))")) # should be False
+
+birds_fly = "orca :: zebra :: panda :: ((typ bird) -> flies)"
+penguins_dont_fly = "orca :: zebra :: panda :: ((typ penguin) -> flies)"
+
+print(f"{birds_fly} : ", model.is_model(birds_fly)) # should be True
+print(f"{penguins_dont_fly} : ", model.is_model(penguins_dont_fly)) # should be False
+# TODO: Last sentence is not working!
+#       (means Hebbian update is probably broken...)

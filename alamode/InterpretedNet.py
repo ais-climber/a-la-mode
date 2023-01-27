@@ -1,14 +1,14 @@
-from Mod.BFNN import BFNN
+from alamode.Net import Net
 from pyparsing import *
 import sys
 
 ParserElement.enablePackrat()
 sys.setrecursionlimit(2000)
 
-class Model:
+class InterpretedNet:
     def __init__(self, net, prop_map):
         """
-        Constructor for a Model, i.e. an *interpreted* BFNN.
+        Constructor for an Interpreted Net
 
         Parameters:
             net - a BFNN
@@ -42,36 +42,54 @@ class Model:
         FUTURE FUNCTIONALITY: Support for interpreting backpropagation
           as a dynamic update operator
         """
-        if e in ['top', "⊤"]:
-            return set()
-        elif e in ['bot', "⊥"]:
+        if e in ['top']:
             return set(self.net.nodes)
+        elif e in ['bot']:
+            return set()
         elif type(e) == str:
-            return self.prop_map[e]
-        elif e[0] in ['not', '¬']:
+            # NOTE: In order for the interpretation to work, we need to take
+            #       the *complement* of the proposition mapping!!!
+            # 
+            # TODO: Explain why this is what we should expect
+            #       (it seems very counterintuitive!)
+            # 
+            prop_eval = self.prop_map[e]
+            return set(self.net.nodes).difference(prop_eval)
+        
+        elif e[0] in ['not']:
             return set(self.net.nodes).difference(self._eval(e[1]))
-        elif e[1] in ['and', '∧']:
-            return self._eval(e[0]).union(self._eval(e[2]))
-        elif e[1] in ['or', '∨']:
+        elif e[1] in ['and']:
             return self._eval(e[0]).intersection(self._eval(e[2]))
-        elif e[1] in ['implies', '→']:
-            if self._eval(e[2]).issubset(self._eval(e[0])):
-                return set()
-            else:
-                return set(self.net.nodes)
-        elif e[1] in ['iff', '↔']:
-            if (self._eval(e[2]).issubset(self._eval(e[0]))
-                and self._eval(e[0]).issubset(self._eval(e[2]))):
-                return set()
-            else:
-                return set(self.net.nodes)
-        elif e[0] in ['knows', 'K']:
-            return self.net.reachable(self._eval(e[1]))
-        elif e[0] in ['typ', 'T']:
+        elif e[1] in ['or']:
+            return self._eval(e[0]).union(self._eval(e[2]))
+        
+        elif e[1] in ['->']:
+            # Rewrite: A -> B == not A or B
+            return self._eval([['not', e[0]], 'or', e[2]])
+        elif e[1] in ['<->']:
+            # Rewrite: A <-> B == (A -> B) and (B -> A)
+            return self._eval([[e[0], '->', e[2]], 'and', [e[2], '->', e[0]]])
+        
+        elif e[0] in ['<know>']:
+            return self.net.reach(self._eval(e[1]))
+        elif e[0] in ['<know↓>']:
+            return self.net.inverse_reach(self._eval(e[1]))
+        elif e[0] in ['<typ>']:
             return self.net.propagate(self._eval(e[1]))
-        elif e[1] in ['up', '+']:
+
+        elif e[0] in ['know']:
+            # Rewrite: know A == not <know> not A
+            return self._eval(['not', ['<know>', ['not', e[1]]]])
+        elif e[0] in ['know↓']:
+            return self._eval(['not', ['<know↓>', ['not', e[1]]]])
+        elif e[0] in ['typ']:
+            return self._eval(['not', ['<typ>', ['not', e[1]]]])
+        
+        # Hebbian Update
+        # TODO: Change operator to something like 'hebb' to be more readable.
+        elif e[1] in ['::']:
             new_net = self.net.hebb_update(self._eval(e[0]))
-            new_model = Model(new_net, self.prop_map)
+            new_model = InterpretedNet(new_net, self.prop_map)
             return new_model._eval(e[2])
         else:
             print(f"ERROR: Expression {e} is not supported.")
@@ -83,33 +101,27 @@ class Model:
 
         When parsing, we consider tokens in reverse order of their binding 
         strength, i.e.:
-            implies, or, and, not, top, bot
+            <->, ->, or, and, not, top, bot
 
         FUTURE FUNCTIONALITY: Support for interpreting backpropagation
           as a dynamic update operator
         """
         restricted_alphas = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJLMNOPQRSUVWXYZ"
         proposition = Word(restricted_alphas)
-        grammar = infix_notation(proposition | "bot" | "top" | "⊥" | "⊤",
+        grammar = infix_notation(proposition | "bot" | "top",
             [
-                # Support for english longhand (easier to type)
-                ('up',      2, OpAssoc.RIGHT),
-                ('knows',     1, OpAssoc.RIGHT),
+                ('::',      2, OpAssoc.RIGHT),
+                ('know',    1, OpAssoc.RIGHT),
+                ('know↓',   1, OpAssoc.RIGHT),
                 ('typ',     1, OpAssoc.RIGHT),
+                ('<know>',  1, OpAssoc.RIGHT),
+                ('<know↓>', 1, OpAssoc.RIGHT),
+                ('<typ>',   1, OpAssoc.RIGHT),
                 ('not',     1, OpAssoc.RIGHT),
                 ('and',     2, OpAssoc.LEFT),
                 ('or',      2, OpAssoc.LEFT),
-                ('implies', 2, OpAssoc.RIGHT),
-                ('iff',     2, OpAssoc.RIGHT),
-                # Support for ascii symbols (easier to read)
-                ('+', 2, OpAssoc.RIGHT),
-                ('K', 1, OpAssoc.RIGHT),
-                ('T', 1, OpAssoc.RIGHT),
-                ('¬', 1, OpAssoc.RIGHT),
-                ('∧', 2, OpAssoc.LEFT),
-                ('∨', 2, OpAssoc.LEFT),
-                ('→', 2, OpAssoc.RIGHT),
-                ('↔', 2, OpAssoc.RIGHT)
+                ('->',      2, OpAssoc.RIGHT),
+                ('<->',     2, OpAssoc.RIGHT),
             ])
 
         return grammar.parse_string(formula)
@@ -121,7 +133,7 @@ class Model:
 
         Returns True   iff   self |= formula
         """
-        return self.interpret(formula) == set()
+        return self.interpret(formula) == set(self.net.nodes)
 
     def is_model_of_rule(self, premises, conclusion):
         """
