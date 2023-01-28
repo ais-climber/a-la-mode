@@ -129,25 +129,14 @@ class Net:
         i.e. the 'inverse' reach.
         
         Formally, we return
-            {x | ∃s ∈ signal. ∀X with s ∉ reach(X^∁). x ∈ X}
+            {n | ∃m ∈ signal. m ∈ reach({n})}
         """
         result = set()
 
-        all_nodes = set(self.nodes)
-        for x in self.nodes:
-            for s in signal:
-                l = list(all_nodes)
-                powerset = chain.from_iterable(combinations(l, r) for r in range(len(l)+1))
-                
-                Xs = [X for X in powerset if s not in self.reach(all_nodes.difference(X))]
-                Xs_with_x = [bool(x in X) for X in Xs]
-
-                # "s works" iff x is in every such X in Xs
-                s_works = Xs != [] and Xs_with_x.count(Xs_with_x[0]) == len(Xs_with_x)
-
-                # If *some* s works, then x is in the set.
-                if s_works:
-                    result.add(x)
+        for n in self.nodes:
+            for m in signal:
+                if m in self.reach(set({n})):
+                    result.add(n)
                     break
 
         return result
