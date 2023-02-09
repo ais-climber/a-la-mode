@@ -11,34 +11,23 @@ from alamode.countermodel_search import countermodel_search
 #--------------------------------------------------------------------
 
 # # Modal Laws for 'know'
-# countermodel_search("know A", 1000, premises=["A"]) # Nec
-# countermodel_search("(know (A and B)) <-> (know A and know B)", 1000) # K
-# countermodel_search("(know A) -> A", 1000) # T
-# countermodel_search("(know A) -> (know know A)", 1000) # 4
-
-# # Modal Laws for 'know↓'
-# countermodel_search("know↓ A", 1000, premises=["A"]) # Nec
-# countermodel_search("(know↓ (A and B)) <-> (know↓ A and know↓ B)", 1000) # K
-# countermodel_search("A -> (know (<know↓> A))", 1000) # Forward
-# countermodel_search("A -> (know↓ (<know> A))", 1000) # Back
+# countermodel_search("know A", 1000, premises=["A"]) # Nec (Operator from Set->Set)
+# countermodel_search("(know (A and B)) <-> (know A and know B)", 1000) # K (Monotonic)
+# countermodel_search("(know A) -> A", 1000) # T (Inclusive)
+# countermodel_search("(know A) -> (know know A)", 1000) # 4 (Idempotent)
+countermodel_search("(know ((know (A -> (know A))) -> A)) -> A", 1000) # Grz (Acyclic)
 
 # # Modal Laws for 'typ'
-# countermodel_search("typ A", 1000, premises=["A"]) # Nec
-# countermodel_search("(typ A) -> A", 1000) # T
-# countermodel_search("(typ A) -> (typ typ A)", 1000) # 4
+# countermodel_search("typ A", 1000, premises=["A"]) # Nec (Operator from Set->Set)
+# countermodel_search("(typ A) -> A", 1000) # T (Inclusive)
+# countermodel_search("(typ A) -> (typ typ A)", 1000) # 4 (Idempotent)
+# countermodel_search("(know A) -> (typ A)", 1000) # Propagation is contained within Graph-Reachability
 
 #--------------------------------------------------------------------
-# Random things I'd like to check
+# Check that these axioms are preserved when we convert from
+# a Neural Model to a Neighborhood Model.
 #--------------------------------------------------------------------
 
-# STATUS:   Countermodel found!
-countermodel_search("((not (know B)) -> (typ A)) -> ((typ (A and B)) <-> (typ A))", 20, max_elements=2)
-
-# STATUS:   No countermodel found. (Searched 1000 randomly-generated models.)
-countermodel_search("((not (know B)) -> (typ A)) -> ((typ (A and B)) -> (typ A))", 1000)
-
-# STATUS:   No counterexample found. (Searched 1000 randomly-generated models.)
-countermodel_search("((typ A) -> B) <-> ((typ (A or (know↓ B))) -> B)", 1000)
 
 
 #--------------------------------------------------------------------
