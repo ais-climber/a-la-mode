@@ -1,6 +1,3 @@
-from alamode.Net import Net
-from alamode.InterpretedNet import InterpretedNet
-
 from itertools import chain, combinations
 from pyparsing import *
 import sys
@@ -180,39 +177,6 @@ class PrefModel:
         premises_sat = len(list(filter(lambda p: not(self.is_model(p)), premises))) == 0
         conclusion_sat = self.is_model(conclusion)
         return not(premises_sat) or conclusion_sat
-
-    def to_net_model(self):
-        """
-        Function to construct a Neural Network model from 
-        this Preferential Model.
-        """
-        nodes = set(self.universe)
-
-        # TODO: get connections from the core of f
-        # TODO: get weights from g
-        # TODO: Define hash to do this second part!
-        # 
-        # layers = [['a', 'b', 'c', 'd', 'e'], ['f', 'g'], ['h']]
-        # weights = {('a', 'f'): 1.0, ('a', 'g'): 0.0, 
-        #         ('b', 'f'): 0.0, ('b', 'g'): -2.0, 
-        #         ('c', 'f'): 0.0, ('c', 'g'): 3.0, 
-        #         ('d', 'f'): 0.0, ('d', 'g'): 3.0,
-        #         ('e', 'f'): 0.0, ('e', 'g'): 3.0,
-        #         ('f', 'h'): 2.0, ('g', 'h'): -2.0}
-        
-        # TODO: do for a *general* activation function!
-        # threshold = 0.0
-        # rate = 1.0
-
-        propositions = list(set([pair[0] for pair in self.prop_map.keys()]))
-        net_prop_map = {p : set([n for n in nodes if self.prop_map[(p, n)] == True]) 
-                            for p in propositions}
-
-        # TODO: do for a *general* activation function!
-        # net = Net(nodes, layers, weights, threshold, rate)
-        # return InterpretedNet(net, net_prop_map)
-
-        pass
 
     #--------------------------------------------------------------------
     # Topology definitions & properties for neighborhood frames

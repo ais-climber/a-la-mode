@@ -3,8 +3,6 @@
 
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
-from alamode.Net import Net
-from alamode.InterpretedNet import InterpretedNet
 from alamode.PrefModel import PrefModel
 
 # I got the following neighborhood model from this neural net:
@@ -40,4 +38,10 @@ model = PrefModel(worlds, f, g, prop_map)
 print("penguin -> bird : ", model.is_model("penguin -> bird"))
 print("bird => flies : ", model.is_model("(typ bird) -> flies"))
 print("penguin => flies : ", model.is_model("(typ penguin) -> flies"))
+print("penguin -> flies : ", model.is_model("penguin -> flies"))
 print()
+
+
+# TODO: Error in code -- both of these give False, but only one can be false!
+# print("penguin -> flies : ", model.is_model("penguin -> flies"))
+# print("not (penguin -> flies) : ", model.is_model("not (penguin -> flies)"))

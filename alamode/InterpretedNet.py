@@ -1,7 +1,3 @@
-from alamode.Net import Net
-from alamode.PrefModel import PrefModel
-
-from itertools import chain, combinations
 from pyparsing import *
 import sys
 
@@ -157,42 +153,6 @@ class InterpretedNet:
         premises_sat = len(list(filter(lambda p: not(self.is_model(p)), premises))) == 0
         conclusion_sat = self.is_model(conclusion)
         return not(premises_sat) or conclusion_sat
-
-    def to_pref_model(self):
-        """
-        Function to construct a classical Preferential Model from 
-        this Neural Net Model.
-        """
-        # All worlds and sets of worlds.
-        # We get the powerset using the usual recipe from
-        # https://docs.python.org/3/library/itertools.html#itertools-recipes
-        worlds = set(self.net.nodes)
-        powerset = list(chain.from_iterable(combinations(list(worlds), r) for r in range(len(list(worlds))+1)))
-
-        # We get the f and g mappings from Reach and Propagate.
-        # f(w) = {X | w ∉ Reach(X^C)}
-        f = {w : set([X for X in powerset 
-                      if w not in self.net.reach(worlds.difference(set(X)))]) 
-                for w in worlds}
-        
-        # g(w) = {X | w ∉ Propagate(X^C)}
-        g = {w : set([X for X in powerset 
-                      if w not in self.net.propagate(worlds.difference(set(X)))]) 
-                for w in worlds}
-
-        # The pref_prop_map is just the original prop_map, but it maps
-        # to truth values instead of sets.
-        # NOTE: Again, in order for the interpretation to work, we need to take
-        #       the *complement* of the proposition mapping!!!
-        # 
-        # TODO: Again, explain why this is what we should expect
-        #       (it seems very counterintuitive!)
-        # 
-        pref_prop_map = {(p, w) : (False if w in self.prop_map[p] else True)
-                            for p in self.prop_map.keys()
-                            for w in worlds }
-
-        return PrefModel(worlds, f, g, pref_prop_map)
 
     def extract_from_model(self):
         """

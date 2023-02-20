@@ -6,7 +6,7 @@ from functools import reduce
 from itertools import chain, combinations
 
 class Net:
-    def __init__(self, nodes, layers, weights, threshold, rate):
+    def __init__(self, nodes, layers, weights, activation_function, rate):
         """
         Constructor for a Net (binary feedforward neural network).
         
@@ -19,14 +19,14 @@ class Net:
             'layers' - a nested list manually separating the layers of the nodes
             'weights' - a dictionary mapping each node pair (i, j) to
                 its weight (a float)
-            'thresholds' - a dictionary mapping each node i to its
-                threshold (a float)
+            'activation_function' - See 'activation_functions.py' for details
             'rate' - the learning rate (a float)
         """
         self.nodes = nodes
         self.weights = weights
         self.layers = layers
-        self.threshold = threshold # TODO: support for separate threshold
+        self.activation_function = activation_function 
+                                   # TODO: support for separate activation function
                                    #   for each neuron; not strictly needed,
                                    #   but mentioned in paper
         self.rate = rate
@@ -43,31 +43,12 @@ class Net:
         layer_widths = [len(layer) for layer in self.layers]
         input_layer = Input(shape=(layer_widths[0],))
         
-        x = input_layer #input_layer.output
+        x = input_layer
         for width in layer_widths[1:-1]:
-            #x = Binary_Relu_Layer(width, self.threshold)(x)
-            x = Dense(width, activation=self._binary_relu)(x)
+            x = Dense(width, activation=self.activation_function)(x)
         
-        #output_layer = Binary_Relu_Layer(layer_widths[-1], self.threshold)(x)
-        output_layer = Dense(layer_widths[-1], activation=self._binary_relu)(x)
+        output_layer = Dense(layer_widths[-1], activation=self.activation_function)(x)
         return tf.keras.Model(inputs=input_layer, outputs=output_layer)
-
-    def _binary_relu(self, x):
-            """
-            A binary rectified linear (ReLU) activation function.
-
-            Technically, we are using ReLU for the activation, and then we
-            binarize the output (and keep it non-negative again using ReLU).  
-            But tensorflow conflates activation and output, so we combine the two here.
-
-            This function just checks whether ReLU applied to the input 
-            vector 'x' exceeds 'self.thresholds'.  If so, we return a vector
-            of 1's, otherwise we return a vector of 0's.
-            """
-            thres_tensor = np.full(x.get_shape()[0], self.threshold)
-            activation = tf.keras.activations.relu(x)
-
-            return tf.keras.activations.relu(tf.sign(tf.subtract(tf.keras.activations.relu(x), thres_tensor)))
 
     def _set_weights(self):
         """
@@ -210,7 +191,7 @@ class Net:
         # (for prettiness, mostly)
         new_weights = {k : v for k , v in new_weights.items() if v != 0.0}
 
-        return Net(self.nodes, self.layers, new_weights, self.threshold, self.rate)
+        return Net(self.nodes, self.layers, new_weights, self.activation_function, self.rate)
 
     def backprop_update(self, signal):
         """
@@ -229,7 +210,7 @@ class Net:
         result = ""
 
         result += "Net\n"
-        result += f"T = {self.threshold} ; rate = {self.rate}\n"
+        result += f"T = {self.activation_function} ; rate = {self.rate}\n"
         result += f"Nodes: {self.nodes}\n"
         result += f"Layers: {self.layers}\n"
         result += f"Weights: {self.weights}\n"
