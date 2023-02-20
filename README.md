@@ -1,11 +1,11 @@
 # à la Mode: A Neural Network Model Builder
+![image](https://user-images.githubusercontent.com/7096372/168408611-afc0ed06-ade7-4854-98f8-e8d564765c33.png)
+
 A Python (Tensorflow) suite for neural network **checking** ("does the net satisfy P?") and neural network **building** ("construct a net that satisfies P.")  We do this by leveraging a neuro-symbolic translation between logical symbols and sets of neurons in the network.
 
 à la Mode is the more hasty and confident sister of [Argyle](https://github.com/ais-climber/argyle). Both share the same core features, but à la Mode releases faster and is easier to use (for those Python+Tensorflow inclined).  However, unlike Argyle, à la Mode is not formally verified (although it's models are proved correct by hand).
 
 **NOTE:** This program is currently **very much in development**, and many of the planned features involve significant research efforts (this is my PhD).  So what the program can do right now is somewhat limited.  
-
-![image](https://user-images.githubusercontent.com/7096372/168408611-afc0ed06-ade7-4854-98f8-e8d564765c33.png)
 
 ## :heavy_check_mark: Supported Features:
 - Model checking (assuming we know the meaning of base atoms)
