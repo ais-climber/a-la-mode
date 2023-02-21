@@ -1,4 +1,4 @@
-from alamode.Net import Net
+from alamode.old_tensorflow_keras.Net import Net
 from alamode.InterpretedNet import InterpretedNet
 
 import random as rand

@@ -10,7 +10,7 @@ class InterpretedNet:
         Constructor for an Interpreted Net
 
         Parameters:
-            net - a BFNN
+            net - a FeedforwardNet
             prop_map - a dictionary mapping 'string' proposition labels
                 to sets of nodes in the net
         """

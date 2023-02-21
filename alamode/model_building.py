@@ -2,7 +2,7 @@
 Functions to actually build Interpreted Nets and Preferential Models.
 """
 from alamode.PrefModel import PrefModel
-from alamode.Net import Net
+from alamode.old_tensorflow_keras.Net import Net
 from alamode.InterpretedNet import InterpretedNet
 
 from itertools import chain, combinations
