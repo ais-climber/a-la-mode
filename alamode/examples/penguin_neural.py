@@ -18,6 +18,7 @@ from alamode.FeedforwardNet import FeedforwardNet
 from alamode.InterpretedNet import InterpretedNet
 from alamode.activation_functions import binary_step
 
+nodes = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 graph = nx.DiGraph()
 graph.add_weighted_edges_from(
     [['a', 'f', 1.0],
@@ -37,7 +38,7 @@ prop_map = {'bird': {'a'}, 'penguin': {'a', 'b'},
             'orca': {'b', 'c'}, 'zebra': {'b', 'd'}, 
             'panda': {'b', 'e'}, 'flies': {'h'}}
 
-net = FeedforwardNet(graph, binary_step, rate)
+net = FeedforwardNet(nodes, graph, binary_step, rate)
 model = InterpretedNet(net, prop_map)
 
 # net.draw()

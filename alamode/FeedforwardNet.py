@@ -7,7 +7,7 @@ from functools import reduce
 from itertools import chain, combinations
 
 class FeedforwardNet:
-    def __init__(self, graph, activation_function, rate):
+    def __init__(self, nodes, graph, activation_function, rate):
         """
         Constructor for a Net (binary feedforward neural network).
         
@@ -26,7 +26,7 @@ class FeedforwardNet:
         # First, make sure that the graph is actually feed-forward (acyclic)
         assert nx.is_directed_acyclic_graph(graph)
 
-        self.nodes = list(nx.topological_sort(graph))
+        self.nodes = nodes
         self.graph = graph
         self.activation_function = activation_function
         self.rate = rate
@@ -36,6 +36,10 @@ class FeedforwardNet:
         Function to get the set of nodes that are reachable from 'signal',
         in the sense of graph-reachability.
         """
+        # TODO: Why does networkx throw an error if the length is 1??
+        if len(self.nodes) == 1:
+            return signal
+
         result = set(signal)
 
         for node in signal:
@@ -51,6 +55,10 @@ class FeedforwardNet:
         Formally, we return
             {n | ∃m ∈ signal. m ∈ reach({n})}
         """
+        # TODO: Why does networkx throw an error if the length is 1??
+        if len(self.nodes) == 1:
+            return signal
+
         result = set(signal)
 
         for node in signal:
@@ -75,7 +83,13 @@ class FeedforwardNet:
         # Note that the nodes are topologically sorted (see the __init__).
         # This means we will always consider the activation of all nodes 
         # preceding 'n' before we consider 'n'.
-        for node in self.nodes:
+        sorted_nodes = list(nx.topological_sort(self.graph))
+
+        # Topological sort will give an empty set if there are no edges.
+        if sorted_nodes == []:
+            return signal
+
+        for node in sorted_nodes:
             # Skip nodes with no predecessors
             if self.graph.in_degree(node) == 0:
                 continue
@@ -99,15 +113,24 @@ class FeedforwardNet:
             ΔW_ij = self.rate * x_i * x_j
         We then return the resulting net.
         """
-        # TODO: ERROR -- the new net might be acyclic!
-        # Fix this by only considering nodes (u, v) in the correct order,
-        # given by topological sort.
+        # TODO: We don't actually update acyclic edges -- we should,
+        # but it ends up violating the fact that the net is acyclic!
 
-        # First, populate new weights with every possible edge (including
-        # those edges with weight 0 that don't show up in the edges).
+        # First, populate new weights with every possible edge (u, v)
+        # where u shows up before v in the topological sort.
+        # (The point is to include those edges with weight 0 that didn't show 
+        # up before in the edges).
+        sorted_nodes = list(nx.topological_sort(self.graph))
         new_edges = []
-        for u in self.nodes:
-            for v in self.nodes:
+
+        # Topological sort will give an empty set if there are no edges.
+        if sorted_nodes == []:
+            return self
+
+        for u in sorted_nodes:
+            rest = sorted_nodes[sorted_nodes.index(u)+1:]
+
+            for v in rest:
                 if (u, v) in self.graph.edges:
                     weight = self.graph.get_edge_data(u, v)['weight']
                     new_edges.append([u, v, weight])
@@ -131,7 +154,7 @@ class FeedforwardNet:
         
         new_graph = nx.DiGraph()
         new_graph.add_weighted_edges_from(new_edges)
-        return FeedforwardNet(new_graph, self.activation_function, self.rate)
+        return FeedforwardNet(self.nodes, new_graph, self.activation_function, self.rate)
 
     def backprop_update(self, signal):
         """
@@ -161,7 +184,7 @@ class FeedforwardNet:
         # font = len(self.nodes)
 
         pos = graphviz_layout(self.graph, prog='dot', args="-Grankdir=LR")
-        nx.draw(self.graph, with_labels=True, pos=pos, font_color='white', node_size=3000,font_size=45)
+        nx.draw(self.graph, with_labels=True, pos=pos, arrowsize=20, font_color='white', node_size=3000,font_size=45)
 
         if show_weights:
             labels = nx.get_edge_attributes(self.graph,'weight')
@@ -182,21 +205,5 @@ if __name__ == "__main__":
          ['d', 'f', -1],
          ['e', 'f', 100]])
 
-    pos = graphviz_layout(graph, prog='dot', args="-Grankdir=LR")
-    nx.draw(graph, with_labels=True, pos=pos, font_weight='bold', font_color='white')
-
-    # print(set(graph.nodes))
-
-    # print(graph.edges)
-    # print(graph.get_edge_data('a', 'd'))
-    # print(dir(graph))
-
     net = FeedforwardNet(graph, None, None)
-    
-    # TEST REACH
-    print(net.reach({'a', 'b'}))
-    print(net.reach({'f'}))
-    print(net.reach({'d', 'c'}))
-    # plt.show()
-
     net.draw(show_weights=False)

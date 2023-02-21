@@ -15,13 +15,15 @@ from alamode.countermodel_search import countermodel_search
 # countermodel_search("(know (A and B)) <-> (know A and know B)", 1000) # K (Monotonic)
 # countermodel_search("(know A) -> A", 1000) # T (Inclusive)
 # countermodel_search("(know A) -> (know know A)", 1000) # 4 (Idempotent)
-countermodel_search("(know ((know (A -> (know A))) -> A)) -> A", 1000) # Grz (Acyclic)
+# countermodel_search("(know ((know (A -> (know A))) -> A)) -> A", 1000) # Grz (Acyclic)
 
 # # Modal Laws for 'typ'
 # countermodel_search("typ A", 1000, premises=["A"]) # Nec (Operator from Set->Set)
 # countermodel_search("(typ A) -> A", 1000) # T (Inclusive)
 # countermodel_search("(typ A) -> (typ typ A)", 1000) # 4 (Idempotent)
 # countermodel_search("(know A) -> (typ A)", 1000) # Propagation is contained within Graph-Reachability
+
+countermodel_search("(typ (A and B)) -> ((typ A) and (typ B))", 1000)
 
 #--------------------------------------------------------------------
 # Check that these axioms are preserved when we convert from
