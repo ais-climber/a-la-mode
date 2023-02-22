@@ -2,6 +2,8 @@ from alamode.FeedforwardNet import FeedforwardNet # TODO: Update!
 from alamode.InterpretedNet import InterpretedNet
 from alamode.activation_functions import binary_step
 
+import matplotlib.pyplot as plt
+
 import networkx as nx
 import random as rand
 import itertools
@@ -125,7 +127,8 @@ def countermodel_search(formula, n, max_elements=25, premises=[]):
                 print(model)
 
                 # New feature!  We draw the net!
-                model.net.draw()
+                model.draw()
+                plt.show()
                 return
     
     print(f"No counterexample found. (Searched {n} randomly-generated models.)\n")

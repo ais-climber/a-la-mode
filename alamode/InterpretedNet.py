@@ -1,6 +1,21 @@
 from pyparsing import *
 import sys
 
+# Packages for drawing nets
+import networkx as nx
+import numpy as np
+from itertools import combinations
+from networkx.drawing.nx_agraph import graphviz_layout
+import matplotlib.pyplot as plt
+from matplotlib.path import Path
+from matplotlib.patches import PathPatch
+
+from scipy.spatial.distance import cdist
+from scipy.spatial.ckdtree import cKDTree
+from scipy.ndimage import gaussian_filter
+
+from netgraph import Graph, get_sugiyama_layout, get_curved_edge_paths
+
 ParserElement.enablePackrat()
 sys.setrecursionlimit(2000)
 
@@ -171,6 +186,77 @@ class InterpretedNet:
         result += f"Prop Map: {self.prop_map}\n"
 
         return result
+
+    def draw(self, show_labels=False):
+        """
+        Function to draw neural net graph using networkx & matplotlib
+
+        TODO: Implement 'show_labels' to show sets corresponding to propositions
+        """
+        # Draw the graph for the net and get it's node positions and axis
+        node_positions, ax = self.net.draw(show_labels)
+
+        # TODO: Draw *all* the subsets, not just the one for 'A'
+        for prop, nodes in self.prop_map.items():
+            subset = list(nodes)
+
+            if len(subset) == 0:
+                # This subset is empty; do nothing
+                return node_positions
+            elif len(subset) == 1:
+                # This subset is of size 1; just draw a circle around the
+                # single element.
+                print("TODO")
+            else:
+                # Construct the minimum spanning tree for the nodes in the subset.
+                xy = np.array([node_positions[node] for node in subset])
+                distances = cdist(xy, xy)
+                h = nx.Graph()
+                h.add_weighted_edges_from([(subset[ii], subset[jj], distances[ii, jj]) for ii, jj in combinations(range(len(subset)), 2)])
+                h = nx.minimum_spanning_tree(h)
+
+                # We compute an edge routing that avoids other nodes.
+                edge_paths = get_curved_edge_paths(list(h.edges), node_positions, k=0.25, origin=(-0.5, -0.5), scale=(2, 2))
+                
+                # Use nearest neighbour interpolation to partition the canvas into 2 regions.
+                # print("EDGE PATHS: ", edge_paths.values())
+                xy1 = np.concatenate(list(edge_paths.values()), axis=0)
+                z1 = np.ones(len(xy1))
+
+                xy2 = np.array([node_positions[node] for node in node_positions if node not in subset])
+                z2 = np.zeros(len(xy2))
+
+                # Add a frame around the axes.
+                # This reduces the desired mask in regions where there are no nearby point from the exclusion list.
+                xmin, xmax = ax.get_xlim()
+                ymin, ymax = ax.get_ylim()
+                xx = np.linspace(xmin, xmax, 100)
+                yy = np.linspace(ymin, ymax, 100)
+
+                left = np.c_[np.full_like(xx, xmin), yy]
+                top = np.c_[xx, np.full_like(yy, ymax)]
+                right = np.c_[np.full_like(xx, xmax), yy]
+                bottom = np.c_[xx, np.full_like(yy, ymin)]
+
+                xy3 = np.concatenate([left, top, right, bottom])
+                z3 = np.zeros((len(xy3)))
+
+                xy = np.concatenate([xy1, xy2, xy3])
+                z = np.concatenate([z1, z2, z3])
+                tree = cKDTree(xy)
+                xy_grid = np.meshgrid(xx, yy)
+                _, indices = tree.query(np.reshape(xy_grid, (2, -1)).T, k=1)
+                z_grid = z[indices].reshape(xy_grid[0].shape)
+
+                # smooth output
+                z_smooth = gaussian_filter(z_grid, 1.5)
+
+                # Graph(g, edge_width=0.5, node_layout=node_positions, node_color=node_color, arrows=True, ax=axes[3])
+                contour = ax.contour(xy_grid[0], xy_grid[1], z_smooth, np.array([0.9]), alpha=0)
+                patch = PathPatch(contour.collections[0].get_paths()[0], facecolor='red', alpha=0.2, zorder=-1)
+                ax.add_patch(patch)
+
+        return node_positions
 
 # Do a test of the syntax parser.
 if __name__ == "__main__":

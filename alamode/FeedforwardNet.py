@@ -1,10 +1,11 @@
 import networkx as nx
-from networkx.drawing.nx_agraph import graphviz_layout
-import matplotlib.pyplot as plt
 
 import numpy as np
 from functools import reduce
 from itertools import chain, combinations
+import matplotlib.pyplot as plt
+
+from netgraph import Graph, get_sugiyama_layout, get_curved_edge_paths
 
 class FeedforwardNet:
     def __init__(self, nodes, graph, activation_function, rate):
@@ -176,21 +177,22 @@ class FeedforwardNet:
 
         return result
 
-    def draw(self, show_weights=True):
+    def draw(self, show_labels=False):
         """
         Function to draw neural net graph using networkx & matplotlib
+
+        TODO: Implement 'show_labels' to show weight labels
         """
-        # # Dynamic font sizing 
-        # font = len(self.nodes)
+        fig, ax = plt.subplots()
 
-        pos = graphviz_layout(self.graph, prog='dot', args="-Grankdir=LR")
-        nx.draw(self.graph, with_labels=True, pos=pos, arrowsize=20, font_color='white', node_size=3000,font_size=45)
+        # Get the Sugiyama layout, then rotate the picture to be horizontal.
+        node_positions = get_sugiyama_layout(list(self.graph.edges)) # a.k.a 'dot'
+        node_positions = {node : np.asarray((-y, x)) for node, (x, y) in node_positions.items()}
 
-        if show_weights:
-            labels = nx.get_edge_attributes(self.graph,'weight')
-            nx.draw_networkx_edge_labels(self.graph,pos,edge_labels=labels, font_size=15)
-        
-        plt.show()
+        Graph(self.graph, edge_width=0.75, edge_cmap='coolwarm', node_layout=node_positions, 
+            node_labels=show_labels, edge_labels=show_labels, node_label_fontdict=dict(size=20), node_color='gainsboro', arrows=True, ax=ax)
+
+        return node_positions, ax
 
 if __name__ == "__main__":
     # Quick sanity checks
@@ -205,5 +207,5 @@ if __name__ == "__main__":
          ['d', 'f', -1],
          ['e', 'f', 100]])
 
-    net = FeedforwardNet(graph, None, None)
+    net = FeedforwardNet(graph, None, None, 1.0)
     net.draw(show_weights=False)
