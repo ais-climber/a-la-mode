@@ -21,8 +21,9 @@ from alamode.countermodel_search import countermodel_search
 # countermodel_search("typ A", 1000, premises=["A"]) # Nec (Operator from Set->Set)
 # countermodel_search("(typ A) -> A", 1000) # T (Inclusive)
 # countermodel_search("(typ A) -> (typ typ A)", 1000) # 4 (Idempotent)
-# countermodel_search("(know A) -> (typ A)", 1000) # 
 
+# Minimal Cause / Skeleton
+# TODO
 
 # TODO next:
 # - draw graphs for subset size 1
