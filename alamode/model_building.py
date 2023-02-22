@@ -2,11 +2,10 @@
 Functions to actually build Interpreted Nets and Preferential Models.
 """
 from alamode.PrefModel import PrefModel
-from alamode.old_tensorflow_keras.Net import Net
+from alamode.FeedforwardNet import FeedforwardNet
 from alamode.InterpretedNet import InterpretedNet
 
 from itertools import chain, combinations
-from tensorflow import Tensor
 
 def PrefModel_from_InterpretedNet(model : InterpretedNet):
         """
@@ -21,14 +20,14 @@ def PrefModel_from_InterpretedNet(model : InterpretedNet):
 
         # We get the f and g mappings from Reach and Propagate.
         # f(w) = {X | w ∉ Reach(X^C)}
-        f = {w : set([X for X in powerset 
-                      if w not in model.net.reach(worlds.difference(set(X)))]) 
-                for w in worlds}
+        f = {w : [set(X) for X in powerset 
+                      if w not in model.net.reach(worlds.difference(set(X)))]
+                 for w in worlds}
         
         # g(w) = {X | w ∉ Propagate(X^C)}
-        g = {w : set([X for X in powerset 
-                      if w not in model.net.propagate(worlds.difference(set(X)))]) 
-                for w in worlds}
+        g = {w : [set(X) for X in powerset 
+                      if w not in model.net.propagate(worlds.difference(set(X)))]
+                 for w in worlds}
 
         # The pref_prop_map is just the original prop_map, but it maps
         # to truth values instead of sets.
@@ -66,7 +65,7 @@ def InterpretedNet_from_PrefModel(model : PrefModel):
         # TODO: Get the m_i that correspond to this x... somehow?
         # What type is the activation function in Tensorflow?
         # 
-        def activation_function(x : Tensor) -> Tensor:
+        def activation_function(xvec, weights):
             pass
 
         propositions = list(set([pair[0] for pair in model.prop_map.keys()]))

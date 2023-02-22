@@ -17,13 +17,13 @@ class PrefModel:
 
         Parameters:
             worlds - a 'set' of 'string' world labels
-            f(w) - A 'dict' that maps worlds to sets of *tuples* of worlds
+            f(w) - A 'dict' that maps worlds to *lists* of *sets* of worlds
                 (think: The set of all "formulas" that hold at world w)
-            g(w) - A 'dict' that maps worlds to sets of *tuples* of worlds, like f(w)
+            g(w) - A 'dict' that maps worlds to *lists* of *sets* of worlds, like f(w)
             prop_map - a dictionary assigning 'bool' truth values to 
                 (proposition, world) pairs, where 'proposition' and 'world' are 'string' labels.
 
-        NOTE: This and InterpretedNet share a lot of code.  Maybe I should
+        TODO: This and InterpretedNet share a lot of code.  Maybe I should
           refactor and write stock interpret, parse, and eval functions that
           both of them inherit from. (e.g.:
             Model.py  --> PrefModel.py
@@ -93,13 +93,12 @@ class PrefModel:
             return self._eval(['not', ['typ', ['not', e[1]]]], w)
             
         elif e[0] in ['know']:
-            truth_set = [u for u in self.universe if self._eval(e[1], u)]
+            truth_set = set([u for u in self.universe if self._eval(e[1], u)])
 
-            # We search for 'truth_set' in f[w], and if found return True.
-            for X in self.f[w]:
-                if set(truth_set) == set(X):
-                    return True
-            return False
+            if truth_set in self.f[w]:
+                return True
+            else:
+                return False
         elif e[0] in ['know↓']:
             # TODO: IMPLEMENT know↓ !!!
             # (it's a little annoying, but it should just be a for-loop)
@@ -107,12 +106,10 @@ class PrefModel:
         elif e[0] in ['typ']:
             truth_set = set([u for u in self.universe if self._eval(e[1], u)])
             
-            # We search for 'truth_set' in g[w], and if found return True.
-            for X in self.g[w]:
-                if set(truth_set) == set(X):
-                    return True
-            return False
-        
+            if truth_set in self.g[w]:
+                return True
+            else:
+                return False
         else:
             print(f"ERROR: Expression {e} is not supported.")
 
@@ -188,10 +185,15 @@ class PrefModel:
         """
         Function to get the core of f(w), i.e. the intersection
         of all sets X ∈ f(w)
+
+        As a convention, if f(w) is empty, then the core is
+        the whole universe (the intersection of nothing). See:
+        https://math.stackexchange.com/questions/370188/empty-intersection-and-empty-union
         """
-        result = set()
+        result = set(self.universe)
+
         for X in f[w]:
-            result.update(set(X))
+            result.intersection_update(X)
 
         return result
 
@@ -202,38 +204,108 @@ class PrefModel:
         Since our universe is *finite*, this is equivalent to checking
         if every f(w) contains its core.  This is much faster to compute.
         """
-        pass
-        # for w in self.universe:
+        # We look for a counterexample, i.e. some w such that the core 
+        # is not in f(w).  If we can't find one, we return True.
+        for w in self.universe:
+            # If there are no sets in f[w], then f[w] is trivially
+            # closed under intersection.
+            if f[w] == []:
+                continue
 
+            elif self.core(f, w) not in f[w]:
+                return False
 
-        #     for X in f[w]:
-        #         if self.core(f, w) in 
-
-        #     if self.core(f, w) not in f[w]
-
-        # return self.core(f, w)
+        return True
 
     def is_closed_under_superset(self, f):
-        pass
+        """
+        Function to check whether f is closed under superset.
+
+        NOTE: This check is exponential!  I can't think of a good 
+          way to avoid iterating through the powerset.
+        """
+        # We look for a counterexample, i.e. some w and some set X in f(w)
+        # with some superset Y *not* in f(w). If we can't find one,
+        # we return True.
+        for w in self.universe:
+            for X in f[w]:
+                for Y in self.powerset:
+                    if set(Y).issuperset(X):
+                        if set(Y) not in f[w]:
+                            return False
+
+        return True
 
     def is_reflexive(self, f):
         """
         Function to check whether f is reflexive, i.e.
         whether every w is in the core of w.
         """
-        pass
+        # We look for a counterexample, i.e. a world that is not in 
+        # its own core. If we can't find one, we return True.
+        for w in self.universe:
+            if w not in self.core(f, w):
+                return False
+
+        return True
 
     def is_transitive(self, f):
-        pass
+        """
+        Function to check whether f is transitive, i.e.
+        for all w, X, if X ∈ f(w) then
+                     {u | X ∈ f(u)} ∈ f(w)
+        """
+        # We look for a counterexample, i.e. a world w and a set X
+        # such that X ∈ f(w), but the set {u | X ∈ f(u)} is not in f(w).
+        for w in self.universe:
+            for X in f[w]:
+                X_set = set([u for u in self.universe if X in f[u]])
+
+                if X_set not in f[w]:
+                    return False
+        
+        return True
 
     def is_acyclic(self, f):
         pass
 
     def g_contains_f(self, f, g):
-        pass
+        """
+        Function to check whether g contains f, i.e.
+        for all w, if X ∈ f(w) then X ∈ g(w)
+        """
+        for w in self.universe:
+            for X in f[w]:
+                if X not in g[w]:
+                    return False
+
+        return True
 
     def f_is_skeleton_of_g(self, f, g):
-        pass
+        """
+        Function to check whether f is a skeleton of g, i.e.
+        for all w, X,
+            if   {u | X ∈ g(u)} U complement(core(f, w)) ∈ g(w)
+            then X ∈ g(w)
+
+        NOTE: This check is exponential!  I can't think of a good 
+          way to avoid iterating through the powerset.
+        """
+        # We look for a counterexample, i.e. a world w and a set X
+        # such that {u | X ∈ g(u)} U complement(core(f, w)) ∈ g(w),
+        # but X is *not* in g(w).
+
+        for w in self.universe:
+            for X in self.powerset:
+                X_set = set([u for u in self.universe if set(X) in g[u]])
+                compl_core = self.universe.difference(self.core(f, w))
+
+                if X_set in g[w] and set(X) not in g[w]:
+                    return False
+
+        return True
+
+
 
     #--------------------------------------------------------------------
 

@@ -21,9 +21,9 @@ from alamode.countermodel_search import countermodel_search
 # countermodel_search("typ A", 1000, premises=["A"]) # Nec (Operator from Set->Set)
 # countermodel_search("(typ A) -> A", 1000) # T (Inclusive)
 # countermodel_search("(typ A) -> (typ typ A)", 1000) # 4 (Idempotent)
-# countermodel_search("(know A) -> (typ A)", 1000) # Propagation is contained within Graph-Reachability
+# countermodel_search("(know A) -> (typ A)", 1000) # 
 
-countermodel_search("(typ (A and B)) -> ((typ A) and (typ B))", 1000, max_elements=15)
+
 # TODO next:
 # - draw graphs for subset size 1
 # - get different colors for different subset choices -- think about color choice!

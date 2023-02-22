@@ -268,7 +268,7 @@ if __name__ == "__main__":
         [
             # Support for english longhand (easier to type)
             ('up',      2, OpAssoc.RIGHT),
-            ('knows',     1, OpAssoc.RIGHT),
+            ('knows',   1, OpAssoc.RIGHT),
             ('typ',     1, OpAssoc.RIGHT),
             ('not',     1, OpAssoc.RIGHT),
             ('and',     2, OpAssoc.LEFT),

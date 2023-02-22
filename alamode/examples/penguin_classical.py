@@ -20,13 +20,13 @@ from alamode.PrefModel import PrefModel
 
 worlds = set(['a', 'b', 'c'])
 
-f = { 'a': {('c', 'a'), ('a',), ('c', 'a', 'b'), ('a', 'b')}, 
-      'b': {('a', 'b'), ('c', 'a', 'b'), ('c', 'b'), ('b')},
-      'c': {('c', 'a', 'b')} }
+f = { 'a': [{'c', 'a'}, {'a',}, {'c', 'a', 'b'}, {'a', 'b'}], 
+      'b': [{'a', 'b'}, {'c', 'a', 'b'}, {'c', 'b'}, {'b'}],
+      'c': [{'c', 'a', 'b'}] }
 
-g = { 'a': {('c', 'a'), ('a',), ('c', 'a', 'b'), ('a', 'b')},
-      'b': {('a', 'b'), ('c', 'a', 'b'), ('c', 'b'), ('b')},
-      'c': {('c', 'a'), ('c', 'a', 'b'), ('c')} }
+g = { 'a': [{'c', 'a'}, {'a',}, {'c', 'a', 'b'}, {'a', 'b'}],
+      'b': [{'a', 'b'}, {'c', 'a', 'b'}, {'c', 'b'}, {'b'}],
+      'c': [{'c', 'a'}, {'c', 'a', 'b'}, {'c'}] }
 
 prop_map = { ('bird', 'c'): True, ('bird', 'a'): False, ('bird', 'b'): True, 
              ('penguin', 'c'): True, ('penguin', 'a'): False, 
@@ -34,6 +34,7 @@ prop_map = { ('bird', 'c'): True, ('bird', 'a'): False, ('bird', 'b'): True,
              ('flies', 'a'): True, ('flies', 'b'): True }
 
 model = PrefModel(worlds, f, g, prop_map)
+print(model)
 
 print("penguin -> bird : ", model.is_model("penguin -> bird"))
 print("bird => flies : ", model.is_model("(typ bird) -> flies"))
