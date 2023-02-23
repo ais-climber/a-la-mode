@@ -63,9 +63,8 @@ net2 = FeedforwardNet(nodes2, graph2, binary_step, rate2)
 interp2 = InterpretedNet(net2, prop_map2)
 
 #------------------------------------------------
-# Net 3: A FeedforwardNet that is reflexive
-#   in places, transitive in places, but still
-#   acyclic.
+# Net 3: A FeedforwardNet that is transitive in 
+#   places, but still acyclic.
 #------------------------------------------------
 # TODO
 
@@ -257,8 +256,13 @@ built_model2 = PrefModel_from_InterpretedNet(interp2)
 # Built Nets: Neural networks built from our
 #   Preferential Models above.
 #------------------------------------------------
-built_net0 = InterpretedNet_from_PrefModel(model0)
-built_net1 = InterpretedNet_from_PrefModel(model1)
+# TODO: The only claim we actually make is that we
+    # can build a net from a *Full Preferential Model*,
+# So actually, for now we can only build a net from
+# model2.
+# SO MAKE MORE FULL PREFERENTIAL MODELS!
+
+
 built_net2 = InterpretedNet_from_PrefModel(model2)
 # TODO: Do the same for model3, model4, model5
 
@@ -287,12 +291,18 @@ test_formulas = [
 ]
 
 def test_PrefModel_from_InterpretedNet():
+    # TODO: Test whether the built models have the right properties!!!
+    # (only valid if the incoming net is feed-forward)
+
     # We test each model separately so that it's clearer which
     # test failed.
     # TODO: Do permutations of propositions, just to exercize
     #   more interpretations.
-    for fml in test_formulas:
-        assert built_model0.is_model(fml) == interp0.is_model(fml)
+
+    # TODO: Tests for interp0
+    #   Is this well-defined?  interp0 has no propositions,
+    #   so all of these formulas are undefined. Should I test
+    #   for whether we catch the error?
 
     for fml in test_formulas:
         assert built_model1.is_model(fml) == interp1.is_model(fml)
@@ -305,11 +315,11 @@ def test_PrefModel_from_InterpretedNet():
 def test_InterpretedNet_from_PrefModel():
     # We test each model separately so that it's clearer which
     # test failed.
-    for fml in test_formulas:
-        assert built_net0.is_model(fml) == model0.is_model(fml)
 
-    for fml in test_formulas:
-        assert built_net1.is_model(fml) == model1.is_model(fml)
+    # TODO: Tests for model0
+    #   Is this well-defined?  model0 has no propositions,
+    #   so all of these formulas are undefined. Should I test
+    #   for whether we catch the error?
 
     for fml in test_formulas:
         assert built_net2.is_model(fml) == model2.is_model(fml)

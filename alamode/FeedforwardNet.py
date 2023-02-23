@@ -24,13 +24,18 @@ class FeedforwardNet:
             'activation_function' - See 'activation_functions.py' for details
             'rate' - the learning rate (a float)
         """
-        # First, make sure that the graph is actually feed-forward (acyclic)
-        assert nx.is_directed_acyclic_graph(graph)
-
         self.nodes = nodes
         self.graph = graph
         self.activation_function = activation_function
         self.rate = rate
+
+        assert self.is_acyclic(), "The neural network's graph must be feed-forward (acyclic)"
+
+    def is_acyclic(self):
+        """
+        Function to check whether this graph is actually feed-forward (acyclic)
+        """
+        return nx.is_directed_acyclic_graph(self.graph)
 
     def reach(self, signal):
         """
@@ -100,7 +105,7 @@ class FeedforwardNet:
             wvec = [self.graph.get_edge_data(m, node)['weight'] for m in preds]
 
             # TODO: generalize for non-binary activation functions
-            activation = self.activation_function(xvec, wvec)
+            activation = self.activation_function(node, preds, xvec, wvec)
             if activation == 1.0:
                 result.add(node)
 

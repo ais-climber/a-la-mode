@@ -72,6 +72,11 @@ class PrefModel:
             return False
         elif type(e) == str:
             return self.prop_map[(e, w)]
+            # if (e, w) in self.prop_map.keys():
+            #     return self.prop_map[(e, w)]
+            # else:
+            #     # By convention, if a proposition is
+            #     # undefined we assume 
         
         elif e[0] in ['not']:
             return not self._eval(e[1], w)

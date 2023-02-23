@@ -59,6 +59,9 @@ def generate_random_net(max_elements=25):
     # (The real action happens when we vary the weights.)
     return FeedforwardNet(nodes, graph, binary_step, rate=1.0)
 
+def generate_random_prop_map():
+    pass
+
 countermodels = dict()
 def countermodel_search(formula, n, max_elements=25, premises=[]):
     """

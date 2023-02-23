@@ -5,6 +5,8 @@ from alamode.PrefModel import PrefModel
 from alamode.FeedforwardNet import FeedforwardNet
 from alamode.InterpretedNet import InterpretedNet
 
+import networkx as nx
+
 from itertools import chain, combinations
 
 def PrefModel_from_InterpretedNet(model : InterpretedNet):
@@ -50,30 +52,41 @@ def InterpretedNet_from_PrefModel(model : PrefModel):
         a Preferential Model.
         """
         nodes = set(model.universe)
-
-        # TODO: get layers from the graph edges somehow...
-        # layers = [['a', 'b', 'c', 'd', 'e'], ['f', 'g'], ['h']]
         
-
+        # We pick edges intended to match the behavior of f(w).
         # Note that weights are picked arbitrarily; the activation
         # function is not actually going to use them.
         ARBITRARY_WEIGHT = 0.0
-        weights = {(u, v) : ARBITRARY_WEIGHT 
-                        for u in nodes for v in nodes
-                        if u in model.core(model.f, v)}
+        graph = nx.DiGraph()
+        graph.add_weighted_edges_from(
+            [(u, v, ARBITRARY_WEIGHT)
+                for u in nodes for v in nodes
+                if u in model.core(model.f, v) and u != v])
+        # NOTE: We *force* irreflexivity in the graph, since the network really
+        #       shouldn't have self-loops!
+        
+        # We pick an activation function that is intended to match the behavior of g(w).
+        def activation_function(n, m_vec, x_vec, weights_vec):
+            size = len(m_vec)
+            assert len(x_vec) == size
+            assert len(weights_vec) == size
 
-        # TODO: Get the m_i that correspond to this x... somehow?
-        # What type is the activation function in Tensorflow?
+            active_preds = [m_vec[i] for i in range(size) if x_vec[i] == 1.0]
+            
+            if nodes.difference(active_preds) not in model.g[n]:
+                return 1.0
+            else:
+                return 0.0
+
+        # NOTE: Again, in order for the interpretation to work, we need to take
+        #       the *complement* of the proposition mapping!!!
         # 
-        def activation_function(xvec, weights):
-            pass
-
+        # TODO: Again, explain why this is what we should expect
+        #       (it seems very counterintuitive!)
         propositions = list(set([pair[0] for pair in model.prop_map.keys()]))
-        net_prop_map = {p : set([n for n in nodes if model.prop_map[(p, n)] == True]) 
+        net_prop_map = {p : set([n for n in nodes if model.prop_map[(p, n)] == False]) 
                             for p in propositions}
 
         # TODO: We currently do not support learning rates in the translation!
-        # net = Net(nodes, layers, weights, activation_function, rate=None)
-        # return InterpretedNet(net, net_prop_map)
-
-        pass
+        net = FeedforwardNet(nodes, graph, activation_function, rate=None)
+        return InterpretedNet(net, net_prop_map)
