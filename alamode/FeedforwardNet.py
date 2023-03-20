@@ -178,7 +178,7 @@ class FeedforwardNet:
         result += "Net\n"
         result += f"Act = {self.activation_function} ; rate = {self.rate}\n"
         result += f"Nodes: {self.nodes}\n"
-        result += f"Graph: {str(self.graph)}\n"
+        result += f"Graph: {str(nx.get_edge_attributes(self.graph, 'weight'))}\n"
 
         return result
 

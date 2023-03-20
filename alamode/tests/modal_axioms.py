@@ -7,23 +7,43 @@
 from alamode.countermodel_search import countermodel_search
 
 #--------------------------------------------------------------------
+# Axioms for propositional logic
+#--------------------------------------------------------------------
+
+countermodel_search("A -> A", 1000)
+countermodel_search("A -> (B -> A)", 1000)
+countermodel_search("(A -> (B -> C)) -> ((A -> B) -> (A -> C))", 1000)
+countermodel_search("((not A) -> (not B)) -> (B -> A)", 1000)
+
+#--------------------------------------------------------------------
 # Axioms for graph-reachability and forward propagation
 #--------------------------------------------------------------------
 
-# # Modal Laws for 'know'
-# countermodel_search("know A", 1000, premises=["A"]) # Nec (Operator from Set->Set)
-# countermodel_search("(know (A and B)) <-> (know A and know B)", 1000) # K (Monotonic)
-# countermodel_search("(know A) -> A", 1000) # T (Inclusive)
-# countermodel_search("(know A) -> (know know A)", 1000) # 4 (Idempotent)
-# countermodel_search("(know ((know (A -> (know A))) -> A)) -> A", 1000) # Grz (Acyclic)
+# Modal Laws for 'know'
+countermodel_search("know A", 1000, premises=["A"]) # Nec (Operator from Set->Set)
+countermodel_search("(know (A and B)) <-> (know A and know B)", 1000) # K (Monotonic)
+countermodel_search("(know A) -> A", 1000) # T (Inclusive)
+countermodel_search("(know A) -> (know know A)", 1000) # 4 (Idempotent)
+countermodel_search("(know ((know (A -> (know A))) -> A)) -> A", 1000) # Grz (Acyclic)
 
-# # Modal Laws for 'typ'
-# countermodel_search("typ A", 1000, premises=["A"]) # Nec (Operator from Set->Set)
-# countermodel_search("(typ A) -> A", 1000) # T (Inclusive)
-# countermodel_search("(typ A) -> (typ typ A)", 1000) # 4 (Idempotent)
+# Modal Laws for 'know↓'
+countermodel_search("know↓ A", 1000, premises=["A"]) # Nec (Operator from Set->Set)
+countermodel_search("(know↓ (A and B)) <-> (know↓ A and know↓ B)", 1000) # K (Monotonic)
+countermodel_search("A -> (know (<know↓> A))", 1000) # (Back)
+countermodel_search("A -> (know↓ (<know> A))", 1000) # (Forth)
+
+# Modal Laws for 'typ'
+countermodel_search("typ A", 1000, premises=["A"]) # Nec (Operator from Set->Set)
+countermodel_search("(typ A) -> A", 1000) # T (Inclusive)
+countermodel_search("(typ A) -> (typ typ A)", 1000) # 4 (Idempotent)
+
+countermodel_search("(typ A) -> (know A)", 1000, max_elements=5)
 
 # Minimal Cause / Skeleton
-# TODO
+countermodel_search("(<know↓> B) -> ((typ A) <-> (typ ((<know↓> B) -> (typ A))))", 1000)
+
+# Cumulative (KLM Conditional Property)
+countermodel_search("(((typ A) -> B) and (B -> A)) -> ((typ A) <-> (typ B))", 1000)
 
 # TODO next:
 # - draw graphs for subset size 1

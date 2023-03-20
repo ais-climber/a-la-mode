@@ -76,9 +76,17 @@ interp2 = InterpretedNet(net2, prop_map2)
 # TODO
 
 #------------------------------------------------
-# Net 5: TODO
+# Net 5: Picked because it exercises a specific
+# case of implication that I wanted to double-check.
+# (Specifically, False -> False should be True.)
 #------------------------------------------------
-# TODO 
+nodes5 = ['a', 'b', 'c']
+graph5 = nx.DiGraph()
+graph5.add_weighted_edges_from([['a', 'b', 0.0], ['a', 'c', 6.0]])
+rate5 = 1.0
+prop_map5 = {'B': {'a', 'b'}, 'A': {'b'}}
+net5 = FeedforwardNet(nodes5, graph5, binary_step, rate5)
+interp5 = InterpretedNet(net5, prop_map5)
 
 # TODO: Unit tests for reach
 # TODO: Unit tests for inverse_reach
@@ -87,7 +95,18 @@ interp2 = InterpretedNet(net2, prop_map2)
 # TODO: Unit tests for _parse
 # TODO: Unit tests for _eval
 # TODO: Unit tests for _interpret
-# TODO: Unit tests for is_model
+
+def test_is_model():
+    # TODO: is_model tests for interp0, 1, 2, 3, 4
+    
+    assert interp5.is_model("B -> A") == True
+    assert interp5.is_model("(typ A) -> B") == False
+    assert interp5.is_model("((typ A) -> B) and (B -> A)") == False
+    assert interp5.is_model("(typ A) <-> (typ B)") == False
+    # False -> False should be True
+    assert interp5.is_model("(((typ A) -> B) and (B -> A)) -> ((typ A) <-> (typ B))") == True
+    
+
 # TODO: Unit tests for is_model_of_rule
 
 #--------------------------------------------------------------------

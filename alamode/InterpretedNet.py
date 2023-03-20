@@ -78,8 +78,28 @@ class InterpretedNet:
             return self._eval(e[0]).union(self._eval(e[2]))
         
         elif e[1] in ['->']:
+            # IMPLICATION 1: Standard Material Implication
             # Rewrite: A -> B == not A or B
             return self._eval([['not', e[0]], 'or', e[2]])
+
+            # IMPLICATION 2: Attempt to fix using Top and Bottom
+            # # Note that with this definition, we do *not* have
+            # # A -> B == not A or B
+            # if self._eval(e[0]).issubset(self._eval(e[2])):
+            #     return set(self.net.nodes)
+            # else:
+            #     return set()
+
+            # # IMPLICATION 3: Bake in truth table
+            # if not (self._eval(e[0]) == set(self.net.nodes)) or (self._eval(e[2]) == set(self.net.nodes)):
+            #     return set(self.net.nodes)
+            # else:
+            #     return self._eval([['not', e[0]], 'or', e[2]])
+
+            # # IMPLICATION 4: Set comprehension implication
+            # # Is this equivalent to the first one?
+            # return set([n for n in self.net.nodes if not(n in self._eval(e[0])) or (n in self._eval(e[2]))])
+
         elif e[1] in ['<->']:
             # Rewrite: A <-> B == (A -> B) and (B -> A)
             return self._eval([[e[0], '->', e[2]], 'and', [e[2], '->', e[0]]])
@@ -148,6 +168,7 @@ class InterpretedNet:
         Returns True   iff   self |= formula
         """
         return bool(self.interpret(formula) == set(self.net.nodes))
+        #return bool(self.interpret(formula) != set())
 
     def is_model_of_rule(self, premises, conclusion):
         """
@@ -264,29 +285,25 @@ if __name__ == "__main__":
     ParserElement.enablePackrat()
     restricted_alphas = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJLMNOPQRSUVWXYZ"
     proposition = Word(restricted_alphas)
-    grammar = infix_notation(proposition | "bot" | "top" | "⊥" | "⊤",
-        [
-            # Support for english longhand (easier to type)
-            ('up',      2, OpAssoc.RIGHT),
-            ('knows',   1, OpAssoc.RIGHT),
-            ('typ',     1, OpAssoc.RIGHT),
-            ('not',     1, OpAssoc.RIGHT),
-            ('and',     2, OpAssoc.LEFT),
-            ('or',      2, OpAssoc.LEFT),
-            ('implies', 2, OpAssoc.RIGHT),
-            ('iff',     2, OpAssoc.RIGHT),
-            # Support for ascii symbols (easier to read)
-            ('+', 2, OpAssoc.RIGHT),
-            ('K', 1, OpAssoc.RIGHT),
-            ('T', 1, OpAssoc.RIGHT),
-            ('¬', 1, OpAssoc.RIGHT),
-            ('∧', 2, OpAssoc.LEFT),
-            ('∨', 2, OpAssoc.LEFT),
-            ('→', 2, OpAssoc.RIGHT),
-            ('↔', 2, OpAssoc.RIGHT)
-        ])
+    grammar = infix_notation(proposition | "bot" | "top",
+            [
+                ('::',      2, OpAssoc.RIGHT),
+                ('know',    1, OpAssoc.RIGHT),
+                ('know↓',   1, OpAssoc.RIGHT),
+                ('typ',     1, OpAssoc.RIGHT),
+                ('<know>',  1, OpAssoc.RIGHT),
+                ('<know↓>', 1, OpAssoc.RIGHT),
+                ('<typ>',   1, OpAssoc.RIGHT),
+                ('not',     1, OpAssoc.RIGHT),
+                ('and',     2, OpAssoc.LEFT),
+                ('or',      2, OpAssoc.LEFT),
+                ('->',      2, OpAssoc.RIGHT),
+                ('<->',     2, OpAssoc.RIGHT),
+            ])
     #print(grammar.parse_string("(p+ □ q) → (□ p+ q)"))
-    print("Example 1: ", grammar.parse_string("(q → p) → ((q+ (T r)) → (p+ (T r)))"))
-    print("Example 2: ", grammar.parse_string("((¬(P ∧ (P+ A)) ↔ ⊤) ∧ ((P ∧ (P+ A)) → (P+ B))) ∨ ((P ∧ (P+ A)) ↔ ⊤) ∧ ((P+ A) → (P+ B)))"))
-    print("Example 2: ", grammar.parse_string("((T oronto) implies ennessee) and otoro"))
+    # print("Example 1: ", grammar.parse_string("(q → p) → ((q+ (T r)) → (p+ (T r)))"))
+    # print("Example 2: ", grammar.parse_string("((¬(P ∧ (P+ A)) ↔ ⊤) ∧ ((P ∧ (P+ A)) → (P+ B))) ∨ ((P ∧ (P+ A)) ↔ ⊤) ∧ ((P+ A) → (P+ B)))"))
+    # print("Example 2: ", grammar.parse_string("((T oronto) implies ennessee) and otoro"))
+
+    print("Example: ", grammar.parse_string("(((typ A) -> B) and (B -> A)) -> ((typ A) <-> (typ B))"))
 

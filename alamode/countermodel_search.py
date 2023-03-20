@@ -129,7 +129,7 @@ def countermodel_search(formula, n, max_elements=25, premises=[]):
                 print(f"{formula} fails in this model:")
                 print(model)
 
-                # New feature!  We draw the net!
+                # # New feature!  We draw the net!
                 # model.draw()
                 # plt.show()
                 return
