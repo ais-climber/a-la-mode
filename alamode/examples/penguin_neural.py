@@ -43,21 +43,23 @@ model = InterpretedNet(net, prop_map)
 
 # net.draw()
 
+print(model.is_model("(typ penguin) -> flies"))
+# should be False
 
 print("penguin -> bird : ", model.is_model("penguin -> bird"))
 print("bird => flies : ", model.is_model("(typ bird) -> flies"))
 print("penguin => flies : ", model.is_model("(typ penguin) -> flies"))
 print()
 
-birds_fly = "orca :: zebra :: panda :: ((typ bird) -> flies)"
-penguins_dont_fly = "orca :: zebra :: panda :: ((typ penguin) -> flies)"
+# birds_fly = "orca :: zebra :: panda :: ((typ bird) -> flies)"
+# penguins_dont_fly = "orca :: zebra :: panda :: ((typ penguin) -> flies)"
 
-print(f"{birds_fly} : ", model.is_model(birds_fly)) # should be True
-print(f"{penguins_dont_fly} : ", model.is_model(penguins_dont_fly)) # should be False
+# print(f"{birds_fly} : ", model.is_model(birds_fly)) # should be True
+# print(f"{penguins_dont_fly} : ", model.is_model(penguins_dont_fly)) # should be False
 # TODO: Last sentence is not working!
 #       (means Hebbian update is probably broken...)
 
 
 # TODO: Error in system?? Both are False, but only one can be!
-print("penguin -> flies : ", model.is_model("penguin -> flies"))
-print("not (penguin -> flies) : ", model.is_model("not (penguin -> flies)"))
+# print("penguin -> flies : ", model.is_model("penguin -> flies"))
+# print("not (penguin -> flies) : ", model.is_model("not (penguin -> flies)"))

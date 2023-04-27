@@ -130,8 +130,8 @@ def countermodel_search(formula, n, max_elements=25, premises=[]):
                 print(model)
 
                 # # New feature!  We draw the net!
-                # model.draw()
-                # plt.show()
+                model.draw()
+                plt.show()
                 return
     
     print(f"No counterexample found. (Searched {n} randomly-generated models.)\n")
