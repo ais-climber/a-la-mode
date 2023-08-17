@@ -135,7 +135,7 @@ Each operator has an interpretation 1) as an operator in logic, and 2) as some i
 
 
 # 🔗 Links and Resources
-For more details on what makes this neuro-symbolic interface work, see our [paper](https://journals.flvc.org/FLAIRS/article/download/130735/133901).
+For more details on what makes this neuro-symbolic interface work, see [Redacted]
 
 What drives our program is the idea that neural networks can be used as formal semantics of knowledge bases.  If you're interested in learning more, I highly recommend starting with:
 
@@ -148,4 +148,4 @@ of self-organising maps**. [[pdf]](https://arxiv.org/pdf/2103.06854.pdf)
 # :incoming_envelope: Contact
 - Is something broken?  You can't run the program?  Suggestions for features?  Feel free to file an issue!
 - Want to contribute to bug fixes/quality of life improvements?  Submit a pull request!  (I'd be surprised and flattered!)
-- Interested in collaborating on the bigger (i.e. open research question) TODOs?  Head over to my [contact](https://ais-climber.github.io/contact/) page!
+- Interested in collaborating on the bigger (i.e. open research question) TODOs?  Head over to [Redacted]
